@@ -1,0 +1,1039 @@
+{
+  "about": {
+    "notfound": "将文章别名设置为 about 可以创建关于页面",
+    "title": "关于"
+  },
+  "admin": {
+    "back_to_site": "返回站点",
+    "feeds_description": "查看全部文章的发布状态，随时进入编辑，并调整前台展示顺序。",
+    "compat_tasks_description": "批量触发向前兼容任务，用于补齐历史帖子缺失的 AI 摘要和图片 blurhash 元数据。",
+    "health_description": "检查关键配置、缺失的集成项，以及可能影响服务正常运行的风险。",
+    "queue_status_description": "查看 AI 摘要队列进度、最近任务结果和失败信息。",
+    "settings_description": "在统一的后台空间中管理站点行为、集成配置和发布规则。",
+    "title": "后台管理",
+    "writing_description": "在独立的管理工作区中编写、编辑和发布内容。",
+    "users_description": "查看并编辑注册用户的基本资料、邮箱、密码与账号角色。"
+  },
+  "compat_tasks": {
+    "title": "兼容任务",
+    "loading": "正在加载兼容任务状态...",
+    "generated_at": "最近更新时间：{{date}}",
+    "running": "执行中",
+    "yes": "是",
+    "no": "否",
+    "ai_summary": {
+      "title": "补齐 AI 摘要",
+      "description": "扫描历史已发布帖子，为尚未生成摘要的内容重新入队。",
+      "eligible": "待处理 {{count}} 篇",
+      "force_eligible": "可强制重跑 {{count}} 篇",
+      "enabled": "AI 摘要已启用：{{value}}",
+      "queue_configured": "队列已配置：{{value}}",
+      "run": "开始补齐",
+      "run_force": "强制全部重跑",
+      "result": "AI 摘要任务已入队 {{queued}} 篇，跳过 {{skipped}} 篇。",
+      "result_force": "已强制重跑入队 {{queued}} 篇 AI 摘要任务，跳过 {{skipped}} 篇。"
+    },
+    "blurhash": {
+      "title": "补齐图片 Blurhash",
+      "description": "扫描历史帖子中的图片，为缺失占位图和尺寸元数据的图片补齐 markdown fragment。",
+      "eligible": "待处理 {{count}} 篇",
+      "note": "该任务在当前浏览器中执行，会逐篇加载图片并回写元数据。",
+      "run": "开始补齐",
+      "progress": "已处理 {{processed}} / {{total}}，更新 {{updated}} 篇，失败 {{failed}} 篇。",
+      "result": "Blurhash 补齐完成：共扫描 {{total}} 篇，成功更新 {{updated}} 篇，失败 {{failed}} 篇。"
+    }
+  },
+  "ai_summary": {
+    "message": {
+      "completed": "AI 摘要已生成。",
+      "failed": "AI 摘要生成失败。",
+      "idle": "AI 摘要任务当前未运行。",
+      "pending": "AI 摘要任务已进入队列。",
+      "processing": "AI 摘要正在生成中。"
+    },
+    "status": {
+      "completed": "已完成",
+      "failed": "失败",
+      "idle": "空闲",
+      "pending": "排队中",
+      "processing": "生成中"
+    },
+    "title": "AI 总结"
+  },
+  "alert": "提示",
+  "alias": "别名",
+  "article": {
+    "delete": {
+      "confirm": "确定删除这篇文章吗？",
+      "title": "删除文章"
+    },
+    "search": {
+      "placeholder": "请输入关键字",
+      "title": "搜索",
+      "title$keyword": "搜索：{{keyword}}"
+    },
+    "title": "文章",
+    "top": {
+      "confirm": "确定置顶这篇文章吗？",
+      "success": "置顶成功",
+      "title": "置顶"
+    },
+    "total_short$count_one": "{{count}} 篇",
+    "total_short$count_other": "{{count}} 篇",
+    "total$count_one": "共有 {{count}} 篇文章",
+    "total$count_other": "共有 {{count}} 篇文章",
+    "untop": {
+      "confirm": "确定取消置顶这篇文章吗？",
+      "success": "取消置顶成功",
+      "title": "取消置顶"
+    }
+  },
+  "avatar": {
+    "url": "头像 URL"
+  },
+  "cancel": "取消",
+  "clear": "清除",
+  "close": "关闭",
+  "comment": {
+    "empty": "评论内容不能为空",
+    "placeholder": {
+      "title": "说点什么吧"
+    },
+    "submit": "发表评论",
+    "success": "评论成功",
+    "title": "评论",
+    "guest_name_required": "昵称不能为空",
+    "guest_name_placeholder": "昵称（必填）",
+    "guest_email_placeholder": "邮箱（可选）",
+    "guest_website_placeholder": "网站（可选）"
+  },
+  "comparison": "对比",
+  "confirm": "确认",
+  "content": {
+    "empty": "内容不能为空"
+  },
+  "count": {
+    "pv": "浏览数",
+    "uv": "访客数"
+  },
+  "create": {
+    "success": "创建成功",
+    "title": "创建"
+  },
+  "created_at": "发布时间",
+  "delete": {
+    "comment": {
+      "confirm": "确定要删除这条评论吗？",
+      "title": "删除评论"
+    },
+    "confirm": "确定要删除吗？",
+    "failed$message": "删除失败: {{message}}",
+    "success": "删除成功",
+    "title": "删除"
+  },
+  "description": "描述",
+  "draft": "草稿",
+  "draft_bin": "草稿箱",
+  "edit": "编辑",
+  "markdown_editor": {
+    "placeholder": {
+      "bold": "加粗文字",
+      "code": "代码",
+      "code_block": "代码块",
+      "heading": "标题",
+      "image_alt": "图片描述",
+      "image_url": "https://example.com/image.png",
+      "italic": "斜体文字",
+      "link_text": "链接文字",
+      "link_url": "https://example.com",
+      "list_item": "列表项",
+      "quote": "引用内容"
+    },
+    "toolbar": {
+      "bold": "加粗",
+      "code_block": "代码块",
+      "heading": "标题",
+      "horizontal_rule": "分割线",
+      "image": "图片链接",
+      "inline_code": "行内代码",
+      "italic": "斜体",
+      "label": "Markdown 工具栏",
+      "link": "链接",
+      "ordered_list": "有序列表",
+      "quote": "引用",
+      "unordered_list": "无序列表",
+      "upload_image": "上传图片"
+    }
+  },
+  "error": {
+    "api_url": "Pages 环境变量中 API_URL 应为 Worker 地址，请检查 Pages 环境变量中 API_URL 是否正确",
+    "api_url_slash": "Pages 环境变量中 API_URL 应为 Worker 地址，请检查 Pages 环境变量中 API_URL 是否正确，且 API_URL 末尾不能有 /",
+    "github_callback": "GitHub OAuth 回调地址应为 `https://<Worker 地址>/api/user/github/callback`，请检查 GitHub OAuth 回调地址是否正确",
+    "not_found": "页面未找到",
+    "permission_denied": "权限不足",
+    "title": "错误"
+  },
+  "feed_password": {
+    "title": "这篇文章需要密码",
+    "desc": "输入访问密码后即可阅读正文。",
+    "placeholder": "请输入访问密码",
+    "submit": "验证并阅读",
+    "empty": "请输入密码",
+    "invalid": "密码不正确，请重试",
+    "forbidden": "没有权限阅读这篇文章",
+    "failed": "验证失败，请稍后重试",
+    "protected": "密码保护",
+    "summary_hidden": "正文和摘要已隐藏，输入密码后查看"
+  },
+  "writing_password": {
+    "enable": "启用文章密码",
+    "desc": "开启后，访客必须输入密码才能阅读正文；标题、标签等元信息仍然可见。",
+    "placeholder": "设置访问密码",
+    "new_hint": "保存后立即生效，密码只保存哈希。",
+    "keep_hint": "留空保存则沿用当前密码；输入新密码会覆盖。",
+    "required": "启用密码访问后，请先设置访问密码。"
+  },
+  "feed_card": {
+    "published$time": "{{time}} 发布",
+    "updated$time": "{{time}} 更新"
+  },
+  "feeds_admin": {
+    "title": "文章管理",
+    "new_article": "写新文章",
+    "total": "共 {{count}} 篇",
+    "empty": "这个分类下还没有文章",
+    "view": "查看",
+    "untitled": "无标题",
+    "updated_at": "更新于 {{date}}",
+    "sort_hint": "排序值越大越靠前，0 表示按发布时间自动排序；置顶文章始终优先。调整后立即影响前台首页和时间线。",
+    "sort_auto": "自动",
+    "sort_unsaved": "待保存",
+    "decrease_sort": "降低排序",
+    "increase_sort": "提高排序",
+    "save_order": "保存排序",
+    "sort_invalid": "排序需要填写非负整数",
+    "save_failed": "排序保存失败",
+    "tabs": {
+      "normal": "已发布",
+      "draft": "草稿",
+      "unlisted": "隐藏"
+    }
+  },
+  "footer": {
+    "rss": "RSS 订阅链接"
+  },
+  "friends": {
+    "apply": "申请友链",
+    "create": "创建友链",
+    "left": "暂时离开",
+    "my_apply": "我的申请",
+    "review": {
+      "accepted": "接受",
+      "rejected": "拒绝",
+      "waiting": "待审核"
+    },
+    "title": "朋友们"
+  },
+  "github_login": "Github 登录",
+  "hashtags": "标签",
+  "home": "首页",
+  "index": {
+    "back": "返回首页",
+    "empty": {
+      "title": "目录为空"
+    },
+    "title": "目录"
+  },
+  "listed": "列出在文章中",
+  "load_more": "加载更多",
+  "login": {
+    "error": {
+      "empty": "请输入用户名和密码",
+      "failed": "登录失败",
+      "invalid": "用户名或密码错误",
+      "network": "网络错误，请重试"
+    },
+    "loading": "登录中...",
+    "no_methods": "没有可用的登录方式",
+    "oauth_only": "请登录后继续",
+    "or": "或",
+    "password": {
+      "placeholder": "请输入密码"
+    },
+    "required": "请登录后继续",
+    "title": "登录",
+    "username": {
+      "placeholder": "请输入用户名"
+    },
+    "register_hint": "还没有账号？",
+    "register": "注册账号"
+  },
+  "logout": "退出登录",
+  "main_content": "正文",
+  "moments": {
+    "edit": "编辑动态",
+    "publish": "发布动态",
+    "title": "动态",
+    "total$count_one": "{{count}} 条动态",
+    "total$count_other": "{{count}} 条动态"
+  },
+  "next": "下一页",
+  "no_more": "没有更多了",
+  "preview": "预览",
+  "previous": "上一页",
+  "publish": {
+    "failed$message": "发布失败: {{message}}",
+    "success": "发布成功",
+    "title": "发布"
+  },
+  "queue_status": {
+    "binding": "队列绑定",
+    "configured": "已配置",
+    "empty_description": "当前没有排队中或最近处理过的 AI 摘要任务。",
+    "empty_title": "暂无队列活动",
+    "delete": "删除",
+    "delete_confirm_description": "确定删除 Feed #{{id}} 的队列任务记录吗？",
+    "delete_confirm_title": "删除队列任务记录",
+    "delete_success": "队列任务记录已删除",
+    "deleting": "删除中",
+    "feed_id": "Feed #{{id}}",
+    "generated_at": "最近更新时间：{{date}}",
+    "load_failed": "队列状态加载失败",
+    "loading": "正在加载队列任务状态...",
+    "not_configured": "未配置",
+    "status": {
+      "completed": "已完成",
+      "failed": "失败",
+      "idle": "空闲",
+      "pending": "排队中",
+      "processing": "处理中"
+    },
+    "summary": {
+      "completed": "已完成任务",
+      "failed": "失败任务",
+      "pending": "排队任务",
+      "processing": "处理中任务"
+    },
+    "retry": "重试",
+    "retry_success": "队列任务已重新入队",
+    "retrying": "重试中",
+    "title": "队列状态",
+    "untitled": "未命名 Feed",
+    "updated_at": "更新时间：{{date}}"
+  },
+  "reload": "重试",
+  "reset": "重置",
+  "save": "保存",
+  "saving": "保存中",
+  "settings": {
+    "cache": {
+      "enabled": {
+        "title": "启用缓存",
+        "desc": "为公开内容响应启用缓存。默认关闭，因为在部分部署环境下它反而可能增加延迟。"
+      },
+      "clear": {
+        "confirm": {
+          "desc": "缓存用于减少访问数据库频率，请仅在缓存错误时尝试清空缓存。",
+          "title": "确认清空缓存吗？"
+        },
+        "desc": "清除所有缓存文件",
+        "title": "清除缓存"
+      },
+      "clear_failed$message": "清除缓存失败: {{message}}"
+    },
+    "comment": {
+      "enable": {
+        "desc": "开启/关闭文章底部评论入口与评论区",
+        "title": "启用评论"
+      }
+    },
+    "counter": {
+      "enable": {
+        "desc": "启用统计文章 PV 与 UV 功能",
+        "title": "启用访问量统计"
+      }
+    },
+    "favicon": {
+      "desc": "设置显示于浏览器的地址栏的图标（Favicon）",
+      "title": "网站图标",
+      "update": {
+        "failed$message": "网站图标更新失败，{{message}}",
+        "success": "网站图标更新成功"
+      }
+    },
+    "footer": {
+      "desc": "设置显示于站点底部的内容（HTML）",
+      "title": "站点底部内容"
+    },
+    "footer_copyright": {
+      "desc": "自定义页脚底部的版权角标（支持 HTML，可放链接）；留空则显示默认的 © 年份 Powered by 文案",
+      "title": "页脚角标"
+    },
+    "webhook": {
+      "title": "Webhook",
+      "url": {
+        "title": "Webhook 地址",
+        "desc": "设置评论和友链通知使用的 webhook 地址。这里同样支持模板变量，适合 GET 场景拼接 query string。"
+      },
+      "method": {
+        "title": "Webhook Method",
+        "desc": "设置 webhook 请求使用的 HTTP Method，例如 GET、POST、PUT 或 PATCH"
+      },
+      "content_type": {
+        "title": "Webhook Content-Type",
+        "desc": "设置 webhook 请求发送时使用的 Content-Type，例如 application/json 或 text/plain"
+      },
+      "headers": {
+        "title": "Webhook 请求头",
+        "desc": "以 JSON 模板自定义 webhook 请求头。可用变量与请求体模板一致。",
+        "label": "Webhook 请求头 JSON"
+      },
+      "body_template": {
+        "title": "Webhook 请求体模板",
+        "desc": "自定义 webhook 发出的请求体。可用变量：{{event}}、{{message}}、{{title}}、{{url}}、{{username}}、{{content}}、{{description}}。",
+        "label": "Webhook 请求体模板"
+      },
+      "test": {
+        "title": "发送测试 Webhook",
+        "desc": "使用当前页面里的 webhook 设置发送一次测试请求。未保存的修改也会直接生效。",
+        "button": "发送测试",
+        "sending": "发送中...",
+        "placeholder": "可选的测试消息内容。留空时会使用默认测试负载。",
+        "success": "Webhook 测试发送成功",
+        "failed": "Webhook 测试发送失败"
+      }
+    },
+    "maintenance": {
+      "title": "维护"
+    },
+    "friend": {
+      "apply": {
+        "desc": "允许其他用户申请友链（需审核）",
+        "title": "友链申请"
+      },
+      "health": {
+        "desc": "启用朋友们链接可访问性检查",
+        "title": "友链健康监测",
+        "ua": {
+          "desc": "设置友链可访问性检查时使用的 User-Agent, 默认 'Rin-Check/1.0'",
+          "title": "友链健康监测 User-Agent"
+        }
+      },
+      "title": "友链设置"
+    },
+    "ai_summary": {
+      "title": "AI 总结设置",
+      "enable": {
+        "title": "启用 AI 总结",
+        "desc": "发布文章时自动生成 AI 总结"
+      },
+      "provider": {
+        "title": "AI 供应商",
+        "desc": "选择或输入 AI 服务供应商"
+      },
+      "model": {
+        "title": "模型",
+        "desc": "选择或输入模型名称"
+      },
+      "api_key": {
+        "title": "API Key",
+        "desc": "输入您的 API 密钥",
+        "set": "已设置",
+        "placeholder_set": "输入新密钥以更新"
+      },
+      "api_url": {
+        "title": "API URL",
+        "desc": "自定义 API 地址（OpenAI 兼容格式）"
+      },
+      "save": {
+        "title": "保存配置",
+        "desc": "保存 AI 配置到数据库",
+        "button": "保存配置"
+      },
+      "save_success": "保存成功",
+      "unsaved_changes": "您有未保存的更改",
+      "test": {
+        "title": "测试模型",
+        "desc": "测试 AI 模型是否可用",
+        "button": "测试连接",
+        "success": "测试成功",
+        "failed": "测试失败",
+        "error": "测试出错",
+        "testing": "正在测试...",
+        "http_error$status": "HTTP 错误 (状态码: {{status}})"
+      }
+    },
+    "get_config_failed$message": "获取配置失败，{{message}}",
+    "import_failed$message": "导入失败，{{message}}",
+    "import_result": "导入结果",
+    "import_skipped": "跳过导入",
+    "import_skipped_item$title$reason": "《{{title}}》- {{reason}}",
+    "import_success$success$skipped": "导入成功，{{success}} 篇文章导入成功，{{skipped}} 篇文章跳过",
+    "login": {
+      "enable": {
+        "desc": "开启/关闭右上角登录按钮，关闭后可通过「双击」底部文字 “© 2024 Powered by” 「三次」触发登录入口",
+        "title": "启用右上角登录按钮"
+      }
+    },
+    "other": {
+      "title": "其他设置"
+    },
+    "personalization": {
+      "title": "个性化"
+    },
+    "site": {
+      "title": "站点信息",
+      "name": {
+        "title": "站点名称",
+        "desc": "设置显示在站点标题和导航栏的网站名称",
+        "label": "站点名称"
+      },
+      "description": {
+        "title": "站点描述",
+        "desc": "设置显示在导航栏的简短描述",
+        "label": "站点描述"
+      },
+      "avatar": {
+        "title": "站点头像",
+        "desc": "设置显示在导航栏的头像，支持填写 URL、上传图片或拖拽上传。SVG 头像在暗色模式下自动反色，URL 后加 #no-invert 可停用",
+        "label": "头像 URL"
+      },
+      "page_size": {
+        "title": "分页大小",
+        "desc": "设置文章列表每页显示的数量",
+        "label": "每页文章数"
+      }
+    },
+    "header_layout": {
+      "title": "Header 布局样式",
+      "desc": "选择桌面端站点头部的排布方式，并在下方预览效果",
+      "options": {
+        "classic": "经典居中",
+        "compact": "极简纯文本"
+      },
+      "preview": {
+        "classic": "品牌、居中导航和操作区保持当前这套平衡布局。",
+        "compact": "几乎去掉所有装饰，只保留最必要的信息和操作。"
+      }
+    },
+    "header_behavior": {
+      "title": "Header 显示方式",
+      "desc": "控制页面滚动时 Header 是否固定显示在顶部",
+      "options": {
+        "fixed": "固定",
+        "static": "不固定",
+        "reveal": "上划时显示"
+      }
+    },
+    "feed_card": {
+      "title": "文章卡片样式",
+      "desc": "选择文章列表、搜索结果和标签页中卡片的视觉风格",
+      "options": {
+        "default": "默认",
+        "editorial": "杂志风"
+      },
+      "preview": {
+        "default": "当前这套紧凑卡片，表面处理简单，干净直接。",
+        "editorial": "更有展示感的卡片，带轻微主题染色、更强层级和类似画册的 framing。"
+      }
+    },
+    "feed_layout": {
+      "title": "文章列表布局",
+      "desc": "选择文章列表、搜索结果和标签页里卡片的排列方式",
+      "preview_note": "仅预览。保存设置后才会应用到站点。",
+      "options": {
+        "list": "单列",
+        "masonry": "瀑布流"
+      },
+      "preview": {
+        "list": "稳定的单列阅读节奏，每行只放一张卡片。",
+        "masonry": "按卡片高度自动拼接的多列布局，更适合长短不一的内容。"
+      }
+    },
+    "theme_color": {
+      "title": "主题色",
+      "desc": "选择按钮、高亮和交互元素使用的强调色",
+      "custom": "自定义",
+      "options": {
+        "rose": "玫红",
+        "violet": "紫色",
+        "blue": "蓝色",
+        "teal": "青绿",
+        "orange": "橙色"
+      }
+    },
+    "rss": {
+      "desc": "启用站点底部 RSS 订阅链接",
+      "title": "RSS 订阅链接"
+    },
+    "title": "设置",
+    "update_failed$message": "更新失败: {{message}}",
+    "wordpress": {
+      "desc": "上传 WordPress 导出的 XML 文件",
+      "title": "从 WordPress 导入"
+    },
+    "mail": {
+      "title": "邮件通知",
+      "enable": {
+        "title": "启用邮件通知",
+        "desc": "开启后，评论、友链申请和新文章发布会按下面的事件开关，通过 Cloud Mail 发送邮件。"
+      },
+      "api_url": {
+        "title": "Cloud Mail 站点地址",
+        "desc": "填写你的 Cloud Mail 部署地址，例如 https://skymail.ink，不要带 /api 路径。"
+      },
+      "email": {
+        "title": "登录邮箱",
+        "desc": "Cloud Mail 后台的登录邮箱，用于获取发送令牌。"
+      },
+      "password": {
+        "title": "登录密码",
+        "set": "已设置",
+        "placeholder": "Cloud Mail 登录密码",
+        "placeholder_set": "留空则沿用已保存的密码",
+        "desc": "密码保存在服务端配置中，前端只显示是否已设置。"
+      },
+      "account_id": {
+        "title": "发件邮箱账号 ID",
+        "placeholder": "留空自动识别",
+        "desc": "留空时自动按登录邮箱匹配账号；匹配不到或有多个账号时，请填写 Cloud Mail 账号列表中的 ID。"
+      },
+      "from_name": {
+        "title": "发件人名称",
+        "placeholder": "留空使用邮箱前缀",
+        "desc": "显示在收件人邮件列表中的发件人名称。"
+      },
+      "to": {
+        "title": "收件人地址",
+        "desc": "多个收件人用英文逗号或分号分隔。"
+      },
+      "events": {
+        "title": "通知事件",
+        "desc": "选择哪些事件需要发送邮件。",
+        "comment": {
+          "title": "新评论",
+          "desc": "有人评论文章时通知。"
+        },
+        "friend": {
+          "title": "友链申请",
+          "desc": "有人提交友链申请时通知。"
+        },
+        "feed": {
+          "title": "新文章发布",
+          "desc": "发布新文章（含草稿转为发布）时通知。"
+        }
+      },
+      "test": {
+        "title": "发送测试邮件",
+        "desc": "使用当前配置向收件人发送一封测试邮件，未保存的修改也会生效。",
+        "button": "发送测试",
+        "success": "测试邮件已提交",
+        "failed": "测试发送失败"
+      }
+    },
+    "feed_transfer": {
+      "export": {
+        "title": "导出文章",
+        "desc": "导出全部文章为 JSON 备份，包含正文、摘要、标签、状态、置顶、排序和时间。",
+        "button": "导出 JSON",
+        "success": "文章备份已开始下载",
+        "export_failed$message": "导出失败：{{message}}"
+      },
+      "import": {
+        "title": "导入文章",
+        "desc": "选择本系统导出的 JSON 备份；同别名或正文相同的文章会跳过并列出原因。"
+      },
+      "import_result$imported$skipped": "成功导入 {{imported}} 篇，跳过 {{skipped}} 篇。",
+      "import_failed$message": "导入失败：{{message}}",
+      "reason": {
+        "alias_exists": "别名已存在",
+        "content_exists": "正文已存在",
+        "invalid_data": "数据不完整",
+        "insert_failed": "写入失败"
+      }
+    },
+    "register": {
+      "enable": {
+        "title": "开放邮箱注册",
+        "desc": "需要先在邮件设置中配置可用的 Cloud Mail 发件账号；开启后新用户可用邮箱验证码注册。"
+      }
+    }
+  },
+  "sitename": "站点名称",
+  "sort_order": "排序",
+  "status": "状态",
+  "summary": "简介",
+  "tags": "标签",
+  "timeline": "时间轴",
+  "title": "标题",
+  "title_empty": "标题不能为空",
+  "top": {
+    "title": "置顶"
+  },
+  "unlisted": "未列出",
+  "untop": {
+    "title": "取消置顶"
+  },
+  "update": {
+    "failed$message": "更新失败: {{message}}",
+    "success": "更新成功",
+    "title": "更新"
+  },
+  "update$sth": "更新 {{sth}}",
+  "upload": {
+    "failed": "上传失败",
+    "failed$size": "上传失败，文件大小不能超过 {{size}} MB",
+    "image": {
+      "clear": "清空图片",
+      "drag_drop": "拖拽图片到这里，或点击选择图片",
+      "drag_hint": "也可以直接填写图片 URL",
+      "drop_now": "松开以上传图片",
+      "invalid_type": "请上传图片文件",
+      "preview_alt": "图片预览",
+      "url_placeholder": "填写图片 URL，或上传一张图片"
+    },
+    "title": "上传"
+  },
+  "uploading": "上传中",
+  "url": "站点 URL",
+  "visible": {
+    "self_only": "仅自己可见"
+  },
+  "writing": "写作",
+  "year$year": "{{year}} 年",
+  "profile": {
+    "title": "个人资料",
+    "avatar": "头像",
+    "avatar_hint": "支持填写头像 URL、上传图片或拖拽上传（最大 2MB）",
+    "username": "昵称",
+    "username_placeholder": "请输入昵称",
+    "save": "保存",
+    "saving": "保存中...",
+    "success": "保存成功",
+    "error": {
+      "file_too_large": "文件大小不能超过 2MB",
+      "invalid_file_type": "请上传图片文件",
+      "empty_username": "昵称不能为空",
+      "update_failed": "更新失败",
+      "network": "网络错误，请重试",
+      "empty_email": "请输入邮箱",
+      "email_unchanged": "新邮箱与当前邮箱相同",
+      "send_code_failed": "验证码发送失败，请稍后重试",
+      "password_too_short": "密码至少需要 8 位",
+      "password_mismatch": "两次输入的密码不一致",
+      "current_password_required": "修改密码需要填写当前密码",
+      "email_code_required": "修改邮箱需要填写验证码",
+      "no_changes": "没有需要保存的修改",
+      "current_password_incorrect": "当前密码不正确",
+      "conflict": "邮箱或用户名已被占用",
+      "rate_limited": "操作过于频繁，请稍后再试",
+      "invalid_input": "提交的资料格式不正确"
+    },
+    "email": "邮箱",
+    "email_placeholder": "you@example.com",
+    "email_hint": "邮箱用于账号识别与安全验证",
+    "email_change_hint": "修改邮箱需要先向新邮箱发送验证码",
+    "email_code": "邮箱验证码",
+    "email_code_placeholder": "6 位数字验证码",
+    "send_code": "发送验证码",
+    "sending_code": "发送中...",
+    "resend_code$seconds": "{{seconds}} 秒后重发",
+    "email_code_sent": "验证码已发送，请检查新邮箱",
+    "password": "密码",
+    "password_hint": "管理员账号也以数据库中的密码为准，环境变量仅用于首次创建",
+    "change_password": "修改密码",
+    "collapse_password": "收起",
+    "current_password": "当前密码",
+    "current_password_placeholder": "请输入当前密码",
+    "new_password": "新密码",
+    "new_password_placeholder": "至少 8 位",
+    "confirm_password": "确认新密码",
+    "confirm_password_placeholder": "请再次输入新密码"
+  },
+  "health": {
+    "generated_at": "最近检查时间：{{date}}",
+    "items": {
+      "common": {
+        "no_action": "无需处理。"
+      },
+      "auth_runtime": {
+        "title": "认证运行环境",
+        "success": {
+          "impact": "认证 Cookie 与令牌校验可以正常工作。",
+          "summary": "JWT 密钥已配置。",
+          "suggestion": "如果需要让所有现有会话失效，请谨慎轮换该密钥。"
+        },
+        "danger": {
+          "impact": "登录与后台会话校验可能完全失效。",
+          "summary": "缺少 JWT_SECRET。",
+          "suggestion": "在使用任何需要认证的路由前，请先为 Worker Secret 配置 JWT_SECRET。"
+        }
+      },
+      "login_methods": {
+        "title": "登录入口",
+        "disabled": {
+          "impact": "公开登录被禁用，后台 UI 无法通过正常登录流程进入。",
+          "summary": "login.enabled 已关闭。",
+          "suggestion": "如果此实例需要交互式后台访问，请在设置中启用登录。"
+        },
+        "missing": {
+          "impact": "用户可以看到登录入口，但没有任何可用的登录方式。",
+          "summary": "GitHub OAuth 和密码登录都未配置。",
+          "suggestion": "请配置 RIN_GITHUB_CLIENT_ID/RIN_GITHUB_CLIENT_SECRET 或 ADMIN_USERNAME/ADMIN_PASSWORD。"
+        },
+        "default_password": {
+          "impact": "管理员账号仍在使用默认用户名和密码，属于严重安全风险。",
+          "summary": "ADMIN_USERNAME/ADMIN_PASSWORD 仍然是 admin / admin123。",
+          "suggestion": "在公开站点前请立即修改默认用户名或密码。"
+        },
+        "oauth_missing": {
+          "impact": "当前只能使用本地密码账号登录，其他用户无法通过 OAuth 登录并评论。",
+          "summary": "GitHub OAuth 未配置。",
+          "suggestion": "如果希望其他用户登录，请配置 RIN_GITHUB_CLIENT_ID/RIN_GITHUB_CLIENT_SECRET。"
+        },
+        "ready": {
+          "impact": "后台登录可用。",
+          "summary": "OAuth 登录已配置，且当前密码登录未使用默认凭据。",
+          "suggestion": "无需处理。"
+        },
+        "details": {
+          "github_configured": "GitHub OAuth：已配置",
+          "github_missing": "GitHub OAuth：未配置",
+          "password_configured": "密码登录：已配置",
+          "password_missing": "密码登录：未配置",
+          "password_default": "密码登录：使用默认凭据"
+        }
+      },
+      "storage": {
+        "title": "对象存储",
+        "ready": {
+          "impact": "上传、网站图标处理和 Feed 缓存产物都可以使用对象存储。",
+          "summary": "存储凭据已配置。",
+          "summary_missing_access_host": "存储本身可用，但缺少 S3_ACCESS_HOST，公开 URL 会退回到 endpoint。",
+          "suggestion_missing_access_host": "如果你需要稳定的公开资源 URL 或自定义资源域名，请设置 S3_ACCESS_HOST。"
+        },
+        "missing": {
+          "impact": "媒体上传、网站图标生成和预生成的 Feed 缓存可能失败或不可用。",
+          "summary_none": "对象存储尚未配置。",
+          "summary_partial": "对象存储仅部分配置完成。缺少：{{keys}}。",
+          "suggestion": "在依赖上传或远程缓存产物前，请先补齐完整的 S3/R2 凭据。"
+        },
+        "details": {
+          "key": "{{key}}"
+        }
+      },
+      "ai_summary": {
+        "title": "AI 总结",
+        "disabled": {
+          "impact": "文章发布时不会生成 AI 总结。",
+          "summary": "AI 总结已关闭。",
+          "suggestion": "如果你希望发布时自动生成总结，请在设置中启用。"
+        },
+        "no_model": {
+          "impact": "发布或更新内容时，总结生成可能失败。",
+          "summary": "AI 总结已启用，但未配置模型。",
+          "suggestion": "启用 AI 总结前，请先在设置中选择模型。"
+        },
+        "worker_ai": {
+          "ready": {
+            "impact": "可以通过 Workers AI 生成 AI 总结。",
+            "summary": "Workers AI 已为模型 {{model}} 配置完成。"
+          },
+          "missing": {
+            "impact": "发布内容时，AI 总结请求会失败。",
+            "summary": "AI 总结使用了 worker-ai，但缺少 Workers AI binding。",
+            "suggestion": "在使用 worker-ai 提供方前，请先在 wrangler 配置中添加 AI binding。"
+          }
+        },
+        "external": {
+          "ready": {
+            "impact": "可以通过已配置的外部提供方生成 AI 总结。",
+            "summary": "{{provider}} 已为 AI 总结配置完成。",
+            "suggestion": "如果你想验证远程模型响应，可以在设置里使用测试功能。"
+          },
+          "missing": {
+            "impact": "发布内容时，AI 总结请求会失败。",
+            "summary_key": "缺少 AI 提供方密钥。",
+            "summary_url": "缺少 AI 提供方 URL。",
+            "suggestion": "在启用 AI 总结前，请先在设置中配置提供方凭据。"
+          },
+          "details": {
+            "provider": "提供方：{{provider}}",
+            "model": "模型：{{model}}"
+          }
+        }
+      },
+      "webhook": {
+        "title": "Webhook 通知",
+        "ready": {
+          "impact": "评论和友链申请通知可以发送到已配置的 webhook。",
+          "summary": "Webhook URL 已配置。",
+          "suggestion_optional": "可选：如果你还希望启用定时友链健康检查，可以开启 friend_crontab。"
+        },
+        "missing": {
+          "impact": "评论和友链事件不会推送到外部聊天工具。",
+          "summary": "Webhook URL 未配置。",
+          "suggestion": "如果你依赖外部通知，请在服务端配置或环境变量中设置 WEBHOOK_URL。"
+        }
+      },
+      "rss": {
+        "title": "RSS 与 Feed 端点",
+        "enabled": {
+          "impact": "Feed 端点已启用；如果没有存储支持，会退回到按需生成。",
+          "summary_cached": "RSS 已启用，且对象存储可用于缓存生成的 Feed 产物。",
+          "summary_on_demand": "RSS 已启用，但由于对象存储不完整，Feed 产物将按需生成。",
+          "suggestion": "如果你希望远程缓存 Feed 产物，请配置对象存储。"
+        },
+        "disabled": {
+          "impact": "访客不会在站点页脚看到 RSS/Atom 链接。",
+          "summary": "客户端设置中已关闭 RSS。",
+          "suggestion": "如果你希望暴露 Feed 发现链接和 Feed 端点，请在设置中启用 RSS。"
+        }
+      },
+      "site_identity": {
+        "title": "站点标识",
+        "ready": {
+          "impact": "访客可以在界面中看到已配置的站点名称。",
+          "summary": "站点标识已为 {{name}} 配置完成。",
+          "summary_missing_avatar": "站点名称已配置为 {{name}}，但缺少头像。",
+          "suggestion_missing_avatar": "如果你希望获得更完整的页头、分享和 Feed 展示效果，请补充站点头像。"
+        },
+        "missing": {
+          "impact": "站点会退回到默认产品名，整体看起来像未完成实例。",
+          "summary": "站点名称未配置。",
+          "suggestion": "请在设置中配置 site.name，或在环境变量中设置 NAME。"
+        }
+      }
+    },
+    "load_failed": "健康检查加载失败",
+    "loading": "正在检查运行环境与配置...",
+    "status": {
+      "danger": "需要处理",
+      "success": "已就绪",
+      "warning": "需要关注"
+    },
+    "summary": {
+      "danger": "严重问题",
+      "success": "已就绪项目",
+      "warning": "待检查项目"
+    },
+    "title": "健康检查"
+  },
+  "sort_latest": "最新",
+  "sort_popular": "热门",
+  "total_tags": "共 {{count}} 个标签",
+  "anonymous": "匿名",
+  "feed_attachment": {
+    "title": "附件",
+    "writing_desc": "访客下载附件前必须验证文章密码；作者和管理员免密。",
+    "upload": "上传附件",
+    "uploading": "上传中...",
+    "empty": "暂无附件",
+    "save_first": "请先保存文章，再到编辑页上传附件。",
+    "delete": "删除附件",
+    "delete_confirm": "确定删除附件「{{name}}」吗？",
+    "too_large": "附件不能超过 {{size}} MB",
+    "too_many": "单篇文章最多上传 {{count}} 个附件",
+    "locked_hint": "本文包含 {{count}} 个附件，验证密码后可下载",
+    "count": "共 {{count}} 个附件",
+    "download": "下载",
+    "download_failed": "下载失败，请刷新页面重新验证密码后再试",
+    "upload_failed": "附件上传失败，请稍后重试。",
+    "storage_unavailable": "附件存储未配置或暂不可用，请联系管理员。",
+    "delete_failed": "附件删除失败，请稍后重试。"
+  },
+  "register": {
+    "title": "注册账号",
+    "subtitle": "使用邮箱验证码创建账号",
+    "email": "邮箱",
+    "email_placeholder": "you@example.com",
+    "code": "验证码",
+    "code_placeholder": "6 位数字验证码",
+    "username": "用户名",
+    "username_placeholder": "请输入用户名",
+    "password": "密码",
+    "password_placeholder": "至少 8 位密码",
+    "confirm_password": "确认密码",
+    "confirm_password_placeholder": "请再次输入密码",
+    "send_code": "发送验证码",
+    "sending_code": "发送中...",
+    "resend_code$seconds": "{{seconds}} 秒后重发",
+    "code_sent": "验证码已发送，请检查邮箱",
+    "submit": "注册",
+    "loading": "注册中...",
+    "success": "注册成功，正在登录...",
+    "have_account": "已有账号？",
+    "back_to_login": "返回登录",
+    "disabled_hint": "管理员尚未开启邮箱注册，或邮件服务尚未配置完成。",
+    "error": {
+      "empty": "请填写邮箱、验证码、用户名和密码",
+      "empty_email": "请输入邮箱",
+      "password_too_short": "密码至少需要 8 位",
+      "password_mismatch": "两次输入的密码不一致",
+      "code_invalid": "验证码格式不正确或已失效",
+      "send_code_failed": "验证码发送失败，请稍后重试",
+      "email_exists": "该邮箱已注册",
+      "conflict": "邮箱或用户名已被占用",
+      "rate_limited": "操作过于频繁，请稍后再试",
+      "disabled": "注册功能未开启",
+      "failed": "注册失败，请重试",
+      "network": "网络错误，请重试"
+    }
+  },
+  "admin_users": {
+    "title": "用户列表",
+    "description": "查看并编辑已注册用户；用户名、邮箱、密码和角色均由管理员直接修改。",
+    "search": "搜索",
+    "search_placeholder": "搜索用户名或邮箱",
+    "loading": "加载中...",
+    "empty": "暂无用户",
+    "error": "加载用户列表失败",
+    "page": "第 {{page}} 页",
+    "previous": "上一页",
+    "next": "下一页",
+    "unbound_email": "未绑定",
+    "no_email": "未绑定邮箱",
+    "verified": "已验证",
+    "unverified": "未验证",
+    "admin": "管理员",
+    "user": "普通用户",
+    "has_password": "已设密码",
+    "no_password": "未设密码",
+    "updated_at": "更新于",
+    "edit": "编辑",
+    "edit_title": "编辑用户",
+    "saving": "保存中...",
+    "save_error": "保存用户信息失败",
+    "created_at": "创建时间",
+    "columns": {
+      "user": "用户",
+      "email": "邮箱",
+      "role": "角色",
+      "created": "创建时间",
+      "actions": "操作"
+    },
+    "form": {
+      "username": "用户名",
+      "username_placeholder": "输入用户名",
+      "email": "邮箱",
+      "email_placeholder": "输入邮箱，留空则解除绑定",
+      "email_hint": "管理员保存后直接视为已验证。",
+      "avatar": "头像地址",
+      "avatar_placeholder": "头像图片地址，可留空",
+      "avatar_hint": "支持完整 URL 或相对路径。",
+      "password": "新密码",
+      "password_placeholder": "留空则不修改密码",
+      "password_hint_existing": "留空不修改；至少 8 位，重置无需原密码。",
+      "password_hint_new": "该用户尚未设置密码；填写至少 8 位密码即可为其设置。",
+      "admin_role": "管理员权限",
+      "admin_role_hint": "关闭后变为普通用户；不能取消自己的权限。",
+      "self_permission_error": "管理员不能取消自己的管理员权限。"
+    },
+    "errors": {
+      "unauthorized": "没有权限执行此操作，请重新登录管理员账号。",
+      "conflict": "用户名或邮箱已被其他用户占用。",
+      "not_found": "该用户不存在或已被删除。",
+      "invalid": "请检查输入内容：用户名需为 1–32 个字符，密码至少 8 位，邮箱格式需正确。"
+    }
+  }
+}

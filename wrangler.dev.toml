@@ -1,0 +1,51 @@
+# 本地开发专用 Wrangler 配置。
+#
+# 线上部署继续使用仓库根目录的 wrangler.toml；本文件只给 `bun dev` / `bun dev:server`
+# 使用，把附件存储切到 Wrangler 自带的本地 R2 模拟，避免本地开发依赖真实 S3/R2 凭据。
+# 本地对象会持久化在 .wrangler/state 下，重启开发服务后仍然存在。
+
+name = "rin-server"
+main = "server/src/_worker.ts"
+compatibility_date = "2025-03-21"
+
+[assets]
+directory = "./dist/client"
+binding = "ASSETS"
+run_worker_first = true
+not_found_handling = "single-page-application"
+
+[triggers]
+crons = ["*/20 * * * *"]
+
+[vars]
+S3_FOLDER = "images/"
+S3_CACHE_FOLDER = "cache/"
+S3_REGION = "auto"
+S3_ENDPOINT = "https://placeholder.r2.cloudflarestorage.com"
+S3_ACCESS_HOST = ""
+S3_BUCKET = "placeholder-bucket"
+S3_FORCE_PATH_STYLE = "false"
+WEBHOOK_URL = ""
+RSS_TITLE = "Rin Development"
+RSS_DESCRIPTION = "Development Environment"
+CACHE_STORAGE_MODE = "database"
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "admin123"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "rin"
+database_id = "local"
+
+[[r2_buckets]]
+binding = "R2_BUCKET"
+bucket_name = "rin-local"
+
+[[queues.producers]]
+binding = "TASK_QUEUE"
+queue = "rin-server-tasks"
+
+[[queues.consumers]]
+queue = "rin-server-tasks"
+max_batch_size = 1
+max_batch_timeout = 5
