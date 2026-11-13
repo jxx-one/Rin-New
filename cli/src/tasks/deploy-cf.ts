@@ -35,6 +35,18 @@ function isQueueAlreadyPresentError(stderr: string) {
   return stderr.includes("already exists") || stderr.includes("already taken") || stderr.includes("[code: 11009]");
 }
 
+/**
+ * 部署前自检：wrangler.toml 必须带上 Cloud Mail 的 Service Binding。
+ * 同 zone 内 Worker 之间只能走绑定，缺失时线上一定会报 "Too many redirects"，
+ * 这里直接让部署失败，而不是静默部署一个坏掉的 Worker。
+ */
+async function assertMailServiceBinding() {
+  const content = await Bun.file("wrangler.toml").text();
+  if (!content.includes('binding = "CLOUD_MAIL"')) {
+    throw new Error("wrangler.toml 缺少 CLOUD_MAIL 的 [[services]] 绑定，已终止部署");
+  }
+}
+
 export function collectWorkerSecrets(source: Record<string, string | undefined> = process.env) {
   const secrets: Record<string, string> = {};
 
@@ -241,7 +253,6 @@ export async function runCloudflareDeploy(target: "all" | "server" | "client" = 
   const queueCreate = await $`${bunExec} x wrangler queues create ${taskQueueName}`.quiet().nothrow();
   if (queueCreate.exitCode !== 0 && !isQueueAlreadyPresentError(queueCreate.stderr.toString())) {
     console.error(`Failed to create Queue "${taskQueueName}"`);
-    console.error(stripIndent(queueCreate.stdout.toString()));
     console.error(stripIndent(queueCreate.stderr.toString()));
     process.exit(1);
   }
@@ -264,6 +275,14 @@ export async function runCloudflareDeploy(target: "all" | "server" | "client" = 
   `)} >> wrangler.toml`.quiet();
 
   await $`echo ${buildWranglerQueueConfig(taskQueueName, preview)} >> wrangler.toml`.quiet();
+
+  // 同 zone 内 Worker 之间只能通过 Service Binding 通信，
+  // 否则博客 Worker 调用挂在 Route 上的 cloud-mail 会被边缘 302 成 "Too many redirects"。
+  await $`echo ${stripIndent(`
+    [[services]]
+    binding = "CLOUD_MAIL"
+    service = "cloud-mail"
+  `)} >> wrangler.toml`.quiet();
 
   if (r2BucketName) {
     await $`echo ${stripIndent(`
@@ -303,6 +322,9 @@ export async function runCloudflareDeploy(target: "all" | "server" | "client" = 
       await updateMigrationVersion("remote", dbName, lastVersion);
     }
   }
+
+  await assertMailServiceBinding();
+
   if (target === "server") {
     await $`${bunExec} x wrangler deploy`;
     await syncWorkerSecrets(workerName);
