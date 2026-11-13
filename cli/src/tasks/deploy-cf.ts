@@ -150,8 +150,8 @@ export async function runCloudflareDeploy(target: "all" | "server" | "client" = 
     return;
   }
 
-  const dbName = renv("DB_NAME", "rin");
-  const workerName = renv("WORKER_NAME", "rin-server");
+  const dbName = renv("DB_NAME", "rin-new");
+  const workerName = renv("WORKER_NAME", "rin-new");
   const taskQueueName = env("TASK_QUEUE_NAME", env("AI_SUMMARY_QUEUE_NAME", `${workerName}-tasks`)) ?? `${workerName}-tasks`;
   const r2BucketName = env("R2_BUCKET_NAME", "");
   const s3Endpoint = env("S3_ENDPOINT", "");
@@ -291,12 +291,9 @@ export async function runCloudflareDeploy(target: "all" | "server" | "client" = 
     });
 
   for (const file of sqlFiles) {
-    // 0013 依赖 feeds.sort_order；全新库在迁移开始前还没有 feeds 表，
-    // 等 0000~0012 执行完、feeds 表已存在后，再补这一列。
     if (getMigrationFileVersion(file) === 13) {
       await fixFeedSortOrderField("remote", dbName);
     }
-
     await $`${bunExec} x wrangler d1 execute ${dbName} --remote --file ./server/sql/${file} -y`;
     console.log(`Migrated ${file}`);
   }
