@@ -4,7 +4,7 @@
 # 使用，把附件存储切到 Wrangler 自带的本地 R2 模拟，避免本地开发依赖真实 S3/R2 凭据。
 # 本地对象会持久化在 .wrangler/state 下，重启开发服务后仍然存在。
 
-name = "rin-server"
+name = "rin-new"
 main = "server/src/_worker.ts"
 compatibility_date = "2025-03-21"
 
