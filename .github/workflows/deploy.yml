@@ -167,17 +167,17 @@ jobs:
         run: |
           PR_NUMBER="${{ needs.prepare.outputs.pr_number }}"
           if [[ "${{ needs.prepare.outputs.is_production }}" == "true" ]]; then
-            echo "worker_name=${REPO_WORKER_NAME:-rin-server}" >> $GITHUB_OUTPUT
-            echo "db_name=${REPO_DB_NAME:-rin}" >> $GITHUB_OUTPUT
+            echo "worker_name=${REPO_WORKER_NAME:-rin-new}" >> $GITHUB_OUTPUT
+            echo "db_name=${REPO_DB_NAME:-rin-new}" >> $GITHUB_OUTPUT
             echo "name=${REPO_NAME:-Rin}" >> $GITHUB_OUTPUT
           elif [[ "$PR_NUMBER" != "0" ]]; then
             # PR Preview uses -pr-<number> suffix
-            echo "worker_name=${REPO_WORKER_NAME:-rin-server}-pr-${PR_NUMBER}" >> $GITHUB_OUTPUT
-            echo "db_name=${REPO_DB_NAME:-rin-preview}" >> $GITHUB_OUTPUT
+            echo "worker_name=${REPO_WORKER_NAME:-rin-new}-pr-${PR_NUMBER}" >> $GITHUB_OUTPUT
+            echo "db_name=${REPO_DB_NAME:-rin-new}-preview" >> $GITHUB_OUTPUT
             echo "name=${REPO_NAME:-Rin} (PR #${PR_NUMBER})" >> $GITHUB_OUTPUT
           else
-            echo "worker_name=${REPO_WORKER_NAME:-rin-server}-preview" >> $GITHUB_OUTPUT
-            echo "db_name=${REPO_DB_NAME:-rin-preview}" >> $GITHUB_OUTPUT
+            echo "worker_name=${REPO_WORKER_NAME:-rin-new}-preview" >> $GITHUB_OUTPUT
+            echo "db_name=${REPO_DB_NAME:-rin-new}-preview" >> $GITHUB_OUTPUT
             echo "name=${REPO_NAME:-Rin} (Preview)" >> $GITHUB_OUTPUT
           fi
           # Output repository-level vars for use in deploy step
