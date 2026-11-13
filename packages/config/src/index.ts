@@ -33,7 +33,7 @@ export const SERVER_CONFIG_DEFAULTS = new Map(
     "webhook.headers": "{}",
     "webhook.body_template": "{\"content\":\"{{message}}\"}",
     "mail.enabled": false,
-    "mail.api_url": "https://skymail.ink",
+    "mail.api_url": "填写你的 Cloud Mail 邮箱地址，格式：https://example.com",
     "mail.email": "",
     "mail.account_id": "",
     "mail.from_name": "",
