@@ -43,6 +43,27 @@ type ConfigReader = {
 
 const DEFAULT_CLOUD_MAIL_URL = "https://skymail.ink";
 
+type MailFetch = (input: string, init?: RequestInit) => Promise<Response>;
+
+const globalMailFetch: MailFetch = (input, init) => fetch(input, init);
+
+let mailFetch: MailFetch = globalMailFetch;
+
+/**
+ * 配置「调用 Cloud Mail API」所用的 fetch。
+ *
+ * 同一个 Cloudflare zone 内，Worker 不能用全局 fetch 调用挂在 Route 上的另一个 Worker：
+ * 边缘会把子请求 302 回原地址，跟随重定向后抛 "Too many redirects"。
+ * 因此线上改用 Service Binding（env.CLOUD_MAIL）直连 Cloud Mail；
+ * 本地 dev 或未配置绑定时回落到普通 fetch。
+ */
+export function bindMailFetch(env: { CLOUD_MAIL?: Fetcher } | undefined) {
+    const binding = env?.CLOUD_MAIL;
+    mailFetch = binding
+        ? (input, init) => binding.fetch(input, init)
+        : globalMailFetch;
+}
+
 function normalizeOptionalString(value: unknown): string | undefined {
   if (typeof value !== "string") {
     return undefined;
@@ -179,7 +200,7 @@ async function readCloudMailResponse(response: Response): Promise<{ json: CloudM
  * 登录 Cloud Mail，返回身份令牌。文档要求 Authorization 直接放令牌，不加 Bearer 前缀。
  */
 async function loginCloudMail(config: MailConfig) {
-  const response = await fetch(`${normalizeCloudMailBaseUrl(config.apiUrl)}/api/login`, {
+  const response = await mailFetch(`${normalizeCloudMailBaseUrl(config.apiUrl)}/api/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email: config.email, password: config.password }),
@@ -213,7 +234,7 @@ async function resolveAccount(config: MailConfig, token: string) {
     return { accountId: configured, name: "", error: "" };
   }
 
-  const response = await fetch(`${normalizeCloudMailBaseUrl(config.apiUrl)}/api/account/list?size=30`, {
+  const response = await mailFetch(`${normalizeCloudMailBaseUrl(config.apiUrl)}/api/account/list?size=30`, {
     method: "GET",
     headers: { Authorization: token },
   });
@@ -341,7 +362,7 @@ export async function sendMail(config: MailConfig, message: MailMessage): Promis
   const request = buildMailRequest(config, message, login.token, accountId, fromName);
 
   try {
-    const response = await fetch(request.url, {
+    const response = await mailFetch(request.url, {
       method: request.method,
       headers: request.headers,
       body: request.body,
