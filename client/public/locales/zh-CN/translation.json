@@ -471,7 +471,7 @@
     "import_success$success$skipped": "导入成功，{{success}} 篇文章导入成功，{{skipped}} 篇文章跳过",
     "login": {
       "enable": {
-        "desc": "开启/关闭右上角登录按钮，关闭后可通过「双击」底部文字 “© 2024 Powered by” 「三次」触发登录入口",
+        "desc": "开启/关闭右上角登录按钮，关闭后可通过「双击」底部文字 “© 2026 Powered by” 「三次」触发登录入口",
         "title": "启用右上角登录按钮"
       }
     },
@@ -580,7 +580,7 @@
       },
       "api_url": {
         "title": "Cloud Mail 站点地址",
-        "desc": "填写你的 Cloud Mail 部署地址，例如 https://skymail.ink，不要带 /api 路径。"
+        "desc": "填写你的 Cloud Mail 部署地址，项目地址：https://github.com/maillab/cloud-mail，不要带 /api 路径。例如：https://example.com"
       },
       "email": {
         "title": "登录邮箱",
