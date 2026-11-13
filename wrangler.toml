@@ -1,5 +1,5 @@
 #:schema node_modules/wrangler/config-schema.json
-name = "rin-server"
+name = "rin-new"
 main = "server/src/_worker.ts"
 compatibility_date = "2025-03-21"
 
@@ -29,15 +29,15 @@ ADMIN_PASSWORD = "admin123"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "rin"
+database_name = "rin-new"
 database_id = "local"
 
 [[queues.producers]]
 binding = "TASK_QUEUE"
-queue = "rin-server-tasks"
+queue = "rin-new-tasks"
 
 [[queues.consumers]]
-queue = "rin-server-tasks"
+queue = "rin-new-tasks"
 max_batch_size = 1
 max_batch_timeout = 5
 
