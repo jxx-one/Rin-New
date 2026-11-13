@@ -34,7 +34,7 @@ ADMIN_PASSWORD = "admin123"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "rin"
+database_name = "rin-new"
 database_id = "local"
 
 [[r2_buckets]]
@@ -43,9 +43,9 @@ bucket_name = "rin-local"
 
 [[queues.producers]]
 binding = "TASK_QUEUE"
-queue = "rin-server-tasks"
+queue = "rin-new-tasks"
 
 [[queues.consumers]]
-queue = "rin-server-tasks"
+queue = "rin-new-tasks"
 max_batch_size = 1
 max_batch_timeout = 5
