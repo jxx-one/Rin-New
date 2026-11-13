@@ -56,12 +56,16 @@ let mailFetch: MailFetch = globalMailFetch;
  * 边缘会把子请求 302 回原地址，跟随重定向后抛 "Too many redirects"。
  * 因此线上改用 Service Binding（env.CLOUD_MAIL）直连 Cloud Mail；
  * 本地 dev 或未配置绑定时回落到普通 fetch。
+ *
+ * 参数用 unknown 接收：Env 里没有 CLOUD_MAIL 字段，
+ * 若声明成 { CLOUD_MAIL?: Fetcher } 会触发 TS 弱类型检测（TS2559），
+ * 所以这里在函数内部做一次收窄。
  */
-export function bindMailFetch(env: { CLOUD_MAIL?: Fetcher } | undefined) {
-    const binding = env?.CLOUD_MAIL;
-    mailFetch = binding
-        ? (input, init) => binding.fetch(input, init)
-        : globalMailFetch;
+export function bindMailFetch(env: unknown) {
+  const binding = (env as { CLOUD_MAIL?: Fetcher } | null | undefined)?.CLOUD_MAIL;
+  mailFetch = binding
+    ? (input, init) => binding.fetch(input, init)
+    : globalMailFetch;
 }
 
 function normalizeOptionalString(value: unknown): string | undefined {
