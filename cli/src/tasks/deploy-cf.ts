@@ -277,8 +277,6 @@ export async function runCloudflareDeploy(target: "all" | "server" | "client" = 
   const migrationVersion = await getMigrationVersion("remote", dbName);
   // Migration 0011 indexes feeds.top, so repair the column before pending SQL runs.
   await fixTopField("remote", dbName);
-  // Migration 0013 orders and indexes feeds.sort_order, so repair it as well.
-  await fixFeedSortOrderField("remote", dbName);
   // Migration 0014 introduces feeds.password_hash for password-protected articles.
   await fixFeedPasswordField("remote", dbName);
   const files = await readdir("./server/sql", { recursive: false });
@@ -293,6 +291,12 @@ export async function runCloudflareDeploy(target: "all" | "server" | "client" = 
     });
 
   for (const file of sqlFiles) {
+    // 0013 依赖 feeds.sort_order；全新库在迁移开始前还没有 feeds 表，
+    // 等 0000~0012 执行完、feeds 表已存在后，再补这一列。
+    if (getMigrationFileVersion(file) === 13) {
+      await fixFeedSortOrderField("remote", dbName);
+    }
+
     await $`${bunExec} x wrangler d1 execute ${dbName} --remote --file ./server/sql/${file} -y`;
     console.log(`Migrated ${file}`);
   }
