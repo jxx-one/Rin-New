@@ -40,6 +40,12 @@
 
 对于需要长期维护的博客，文章还可以单独设置展示顺序。置顶文章仍然优先，其次是手动排序值，最后才按时间排序。这样可以把系列文章、重要文章或专题内容固定在更靠前的位置，而不必修改发布时间。
 
+| 文章管理 | 手动排序 |
+| :--: | :--: |
+| <img src="docs/screenshots/article-management.png" alt="后台文章管理页面" width="420"> | <img src="docs/screenshots/article-sorting.png" alt="文章排序设置" width="420"> |
+
+<p align="center"><em>按状态筛选文章，并直接在列表中调整前台展示顺序</em></p>
+
 ## 🔐 文章密码访问
 
 原版文章默认公开。Rin-New 可以为单篇文章开启密码访问。
@@ -56,6 +62,12 @@ Rin-New 在写作页增加了附件区域，可以给一篇文章挂载多个文
 
 删除文章时，附件记录和对应的存储对象会一起清理，避免留下孤立文件。附件本身存放在私有对象存储中，不会把真实存储路径暴露给前台。
 
+<p align="center">
+  <img src="docs/screenshots/write-article.png" alt="写作页的文章密码与附件设置" width="860">
+</p>
+
+<p align="center"><em>写作页可直接开启文章密码，并在同一页配置文件附件</em></p>
+
 ## 👥 邮箱验证码注册与用户中心
 
 原版主要面向单管理员使用。Rin-New 增加了一套更完整的普通用户体系。
@@ -66,6 +78,12 @@ Rin-New 在写作页增加了附件区域，可以给一篇文章挂载多个文
 
 后台增加用户列表，管理员可以搜索用户，并查看邮箱验证状态、角色、密码状态和注册时间。每个用户都可以单独编辑资料、重置密码或调整管理员权限；管理员不能取消自己的权限，防止把自己锁在后台之外。🔐
 
+| 用户列表 | 个人资料 |
+| :--: | :--: |
+| <img src="docs/screenshots/user-list.png" alt="后台用户列表" width="420"> | <img src="docs/screenshots/profile.png" alt="个人资料页面" width="420"> |
+
+<p align="center"><em>后台统一管理用户，登录用户可自行维护头像、昵称、邮箱和密码</em></p>
+
 ## 📬 Cloud Mail 邮件通知
 
 Rin-New 增加了更完整的邮件通知配置，可以分别控制不同事件的提醒。
@@ -73,6 +91,12 @@ Rin-New 增加了更完整的邮件通知配置，可以分别控制不同事件
 目前支持 **新评论**、**友链申请** 和 **新文章发布** 三类通知，每一类都可以单独开关。后台提供测试邮件功能，配置完成后可以先发一封测试邮件，确认账号、发件地址和投递流程正常，再正式启用。📨
 
 邮件模板和通知内容会经过转义处理，避免评论或申请内容中的特殊字符破坏邮件正文。
+
+<p align="center">
+  <img src="docs/screenshots/mail-settings.png" alt="Cloud Mail 邮件通知配置页面" width="860">
+</p>
+
+<p align="center"><em>配置 Cloud Mail 站点地址、登录账号、发件人和通知事件</em></p>
 
 ## 📦 文章导出与导入
 
@@ -82,11 +106,25 @@ Rin-New 支持把本站文章导出为 JSON 文件，再导入到另一个 Rin-N
 
 这个功能主要用于同系统之间的迁移，不用于替代对象存储的完整备份。
 
+<p align="center">
+  <img src="docs/screenshots/article-import-export.png" alt="文章导出与导入设置页面" width="860">
+</p>
+
+<p align="center"><em>文章可导出为 JSON 备份，也可从同系统导出的 JSON 中恢复</em></p>
+
 ## 🏷️ 页脚与站点细节
 
 页脚版权角标可以在后台自定义，支持填写简单的 HTML，方便替换成自己的站点名称、备案信息或品牌链接。
 
 原版固定的页脚样式仍然保留为默认值；没有自定义时，页面会继续使用默认文案。🪧
+
+同一个设置页还可以控制是否开放邮箱注册，以及编辑站点底部内容，把注册入口、备案信息和页脚署名放在一个地方管理。
+
+<p align="center">
+  <img src="docs/screenshots/settings-register-footer.png" alt="邮箱注册与页脚编辑设置" width="860">
+</p>
+
+<p align="center"><em>设置页可开启邮箱注册，并编辑站点底部内容与页脚角标</em></p>
 
 ## 🎨 界面与交互优化
 
@@ -99,6 +137,12 @@ Rin-New 对原版一些使用频率较高的界面做了重新整理。
 后台中文文案默认使用简体中文，只有用户主动切换语言后才会记住选择，不再因为浏览器语言或首屏加载顺序偶尔变成英文或原始文案键。🇨🇳
 
 此外还修复了弹窗关闭后页面滚动被锁住的问题，以及部分提示框、确认框关闭后无法继续滚动页面的体验问题。
+
+<p align="center">
+  <img src="docs/screenshots/edit-user.png" alt="编辑用户弹窗" width="720">
+</p>
+
+<p align="center"><em>编辑用户弹窗采用两列布局，底部操作固定，不再被内容截断</em></p>
 
 ## ☁️ 部署方式
 
@@ -116,10 +160,10 @@ Rin-New 继续使用原版的 Cloudflare 部署结构：
 
 | 资源 | 默认名称 | 说明 |
 | :-- | :-- | :-- |
-| ⚙️ Worker | `rin-new-server` | 后端服务 |
+| ⚙️ Worker | `rin-new` | 后端服务 |
 | 🌐 Pages 项目 | `rin-new` | 前端站点 |
 | 🗄️ D1 数据库 | `rin-new` | 文章与用户数据 |
-| 📬 Queue | `rin-new-server-tasks` | 后台任务队列 |
+| 📬 Queue | `rin-new-tasks` | 后台任务队列 |
 | 🪣 本地 R2 bucket | `rin-new-local` | 本地附件存储 |
 
 这些名称都可以通过 `.env.local` 中的 `WORKER_NAME`、`DB_NAME`、`TASK_QUEUE_NAME`、`PAGES_PROJECT_NAME` 覆盖。
@@ -132,11 +176,14 @@ bun run db:migrate
 bun dev
 ```
 
-正式部署前需要先在 Cloudflare 创建 D1 数据库和对象存储，并把部署配置中的占位信息替换成真实配置。已有站点升级时，建议先备份 D1 数据，再执行迁移。🚀
+正式部署前需要配置好 Cloudflare API Token、账号 ID，以及 D1、对象存储等真实配置。`bun run deploy` 会创建或复用 D1 数据库、执行迁移并部署 Worker；如果还需要单独的 Pages 项目，再执行客户端部署命令。🚀
 
 ```bash
 bun run deploy
+bun cli/bin/rin.ts deploy --client
 ```
+
+已有站点升级时，建议先备份 D1 数据，再执行迁移。
 
 ## 💛 说明
 
