@@ -5,8 +5,8 @@ import { escapeHtml, resolveMailConfig, sendMail, type SendMailResult } from "..
 import { timingSafeEqual } from "../utils/password";
 import type { DB } from "../core/hono-types";
 
-/** 验证码用途：注册新账号，或在登录后更换邮箱。 */
-export type EmailVerificationPurpose = "register" | "email_change";
+/** 验证码用途：注册新账号、登录后更换邮箱，或忘记密码重置。 */
+export type EmailVerificationPurpose = "register" | "email_change" | "password_reset";
 
 /** 邮箱验证码有效期：10 分钟。 */
 export const EMAIL_CODE_TTL_SECONDS = 10 * 60;
@@ -216,7 +216,11 @@ export async function sendVerificationEmail(
         return { success: false, error: "Mail service is disabled" };
     }
 
-    const action = purpose === "register" ? "注册账号" : "更换邮箱";
+    const action = purpose === "register"
+        ? "注册账号"
+        : purpose === "password_reset"
+            ? "重置密码"
+            : "更换邮箱";
     const minutes = Math.floor(EMAIL_CODE_TTL_SECONDS / 60);
 
     return await sendMail(config, {

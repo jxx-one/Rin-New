@@ -246,8 +246,45 @@
   },
   "listed": "Listed in articles",
   "load_more": "Load More",
+  "forgot": {
+    "title": "Reset password",
+    "subtitle": "Reset your sign-in password with an email verification code",
+    "email": "Email",
+    "email_placeholder": "you@example.com",
+    "code": "Verification code",
+    "code_placeholder": "6-digit verification code",
+    "password": "New password",
+    "password_placeholder": "At least 8 characters",
+    "confirm_password": "Confirm new password",
+    "confirm_password_placeholder": "Re-enter your new password",
+    "send_code": "Send code",
+    "sending_code": "Sending...",
+    "resend_code$seconds": "Resend in {{seconds}}s",
+    "code_sent": "If this email is registered, a code has been sent. Check your inbox.",
+    "submit": "Reset password",
+    "loading": "Submitting...",
+    "success": "Password reset. Returning to login...",
+    "back_to_login": "Back to login",
+    "error": {
+      "empty": "Email, code and new password are required",
+      "empty_email": "Enter your email",
+      "code_invalid": "The verification code is invalid or expired",
+      "password_too_short": "Password must be at least 8 characters",
+      "password_mismatch": "Passwords do not match",
+      "captcha": "Please complete the human verification",
+      "captcha_failed": "Human verification failed. Please try again.",
+      "send_code_failed": "Failed to send the code. Try again later.",
+      "rate_limited": "Too many requests. Try again later.",
+      "too_many_attempts": "Too many incorrect attempts. Request a new code.",
+      "mail_unavailable": "The mail service is not configured or unavailable",
+      "failed": "Failed to reset the password. Try again.",
+      "network": "Network error. Try again."
+    }
+  },
   "login": {
     "error": {
+      "captcha": "Please complete the human verification",
+      "captcha_failed": "Human verification failed. Please try again.",
       "empty": "Please enter username and password",
       "failed": "Login failed",
       "invalid": "Invalid username or password",
@@ -266,7 +303,8 @@
       "placeholder": "Please enter your username"
     },
     "register_hint": "No account yet?",
-    "register": "Create account"
+    "register": "Create account",
+    "forgot_password": "Forgot password?"
   },
   "logout": "Logout",
   "main_content": "Main content",
@@ -368,6 +406,28 @@
     "footer_copyright": {
       "desc": "Customize the copyright badge at the very bottom of the footer (HTML supported, links allowed); leave empty to show the default © year Powered by line",
       "title": "Footer badge"
+    },
+    "turnstile": {
+      "title": "Human verification",
+      "enable": {
+        "title": "Enable Cloudflare Turnstile",
+        "desc": "When enabled, the login, registration and password reset pages show a human verification challenge. It takes effect only after both the site key and the secret key are configured."
+      },
+      "keys": {
+        "title": "Turnstile keys",
+        "desc": "Create a widget on the Turnstile page of the Cloudflare dashboard, then copy its site key and secret key here."
+      },
+      "site_key": {
+        "title": "Site key",
+        "desc": "Public key sent to the browser to render the widget."
+      },
+      "secret_key": {
+        "title": "Secret key",
+        "set": "Configured",
+        "placeholder": "Paste the secret key",
+        "placeholder_set": "Leave blank to keep the current key",
+        "desc": "Stored on the server only; the API returns a mask. Saving it blank will not overwrite an existing key."
+      }
     },
     "webhook": {
       "title": "Webhook",
@@ -967,6 +1027,8 @@
     "disabled_hint": "Registration is not enabled, or the mail service is not configured yet.",
     "error": {
       "empty": "Email, code, username and password are required",
+      "captcha": "Please complete the human verification",
+      "captcha_failed": "Human verification failed. Please try again.",
       "empty_email": "Enter your email",
       "password_too_short": "Password must be at least 8 characters",
       "password_mismatch": "Passwords do not match",

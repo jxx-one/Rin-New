@@ -16,6 +16,9 @@ export const CLIENT_CONFIG_DEFAULTS = new Map(
     "login.enabled": true,
     // 邮箱注册默认关闭；管理员在设置页开启，且必须先配置好 Cloud Mail 发件账号。
     "register.enabled": false,
+    // Cloudflare Turnstile 人机验证：默认关闭，站点密钥是公开值，可以随前端配置下发。
+    "turnstile.enabled": false,
+    "turnstile.site_key": "",
     "site.name": "Rin",
     "site.description": "A lightweight personal blogging system",
     "site.avatar": "",
@@ -41,6 +44,8 @@ export const SERVER_CONFIG_DEFAULTS = new Map(
     "mail.notify_comment": true,
     "mail.notify_friend": true,
     "mail.notify_feed": true,
+    // Turnstile 服务端密钥：只在服务端保存，接口返回时始终打码。
+    "turnstile.secret_key": "",
   }),
 );
 
@@ -63,9 +68,12 @@ export const AI_CONFIG_KEYS = [
   `${AI_CONFIG_PREFIX}api_url`,
 ] as const;
 
+export const TURNSTILE_CONFIG_PREFIX = "turnstile.";
+
 export const SENSITIVE_SERVER_CONFIG_FIELDS = [
   `${AI_CONFIG_PREFIX}api_key`,
   `${MAIL_CONFIG_PREFIX}password`,
+  `${TURNSTILE_CONFIG_PREFIX}secret_key`,
   // 旧版邮件通道的密钥已不再使用，但保留掩码避免历史配置明文暴露。
   `${MAIL_CONFIG_PREFIX}api_key`,
 ] as const;

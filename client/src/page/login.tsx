@@ -4,6 +4,7 @@ import { useLocation } from "wouter";
 import { ButtonWithLoading, Button } from "../components/button";
 import { Icon } from "../components/icon";
 import { Input } from "../components/input";
+import { TurnstileWidget } from "../components/turnstile";
 import { client, oauth_url } from "../app/runtime";
 import { setAuthToken } from "../utils/auth";
 import { getLoginRedirectPath } from "../utils/auth-redirect";
@@ -11,16 +12,24 @@ import { getLoginRedirectPath } from "../utils/auth-redirect";
 export function LoginPage() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [authStatus, setAuthStatus] = useState<{ github: boolean; password: boolean; register: boolean }>({ github: false, password: false, register: false });
+    const [authStatus, setAuthStatus] = useState<{ github: boolean; password: boolean; register: boolean; turnstile: boolean; turnstileSiteKey: string }>({ github: false, password: false, register: false, turnstile: false, turnstileSiteKey: '' });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [captchaToken, setCaptchaToken] = useState('');
+    const [captchaResetSignal, setCaptchaResetSignal] = useState(0);
     const [, setLocation] = useLocation();
 
     // Fetch auth status on mount
     useEffect(() => {
         client.auth.status().then(({ data }) => {
             if (data) {
-                setAuthStatus(data);
+                setAuthStatus({
+                    github: Boolean(data.github),
+                    password: Boolean(data.password),
+                    register: Boolean(data.register),
+                    turnstile: Boolean(data.turnstile),
+                    turnstileSiteKey: data.turnstileSiteKey || '',
+                });
             }
         });
     }, []);
@@ -30,15 +39,28 @@ export function LoginPage() {
             setError(t('login.error.empty'));
             return;
         }
+        if (authStatus.turnstile && !captchaToken) {
+            setError(t('login.error.captcha'));
+            return;
+        }
 
         setIsLoading(true);
         setError('');
 
         try {
-            const { data, error: apiError } = await client.auth.login({ username, password });
+            const { data, error: apiError } = await client.auth.login({
+                username,
+                password,
+                turnstileToken: captchaToken || undefined,
+            });
 
             if (apiError) {
-                setError(t('login.error.invalid'));
+                const message = String(apiError.value || '');
+                if (authStatus.turnstile && message.toLowerCase().includes('verification')) {
+                    setError(t('login.error.captcha_failed'));
+                } else {
+                    setError(t('login.error.invalid'));
+                }
                 setIsLoading(false);
                 return;
             }
@@ -57,6 +79,11 @@ export function LoginPage() {
             setError(t('login.error.network'));
         } finally {
             setIsLoading(false);
+            if (authStatus.turnstile) {
+                // Turnstile token 一次性有效，任何提交尝试后都要重新出题。
+                setCaptchaToken('');
+                setCaptchaResetSignal((current) => current + 1);
+            }
         }
     };
 
@@ -88,6 +115,13 @@ export function LoginPage() {
                             onSubmit={handleLogin}
                             disabled={isLoading}
                         />
+                        {authStatus.turnstile && authStatus.turnstileSiteKey && (
+                            <TurnstileWidget
+                                siteKey={authStatus.turnstileSiteKey}
+                                resetSignal={captchaResetSignal}
+                                onToken={setCaptchaToken}
+                            />
+                        )}
                         <div className="flex flex-row items-center space-x-4 pt-2">
                             <ButtonWithLoading
                                 title={isLoading ? t("login.loading") : t("login.title")}
@@ -95,6 +129,13 @@ export function LoginPage() {
                                 loading={isLoading}
                             />
                         </div>
+                        <button
+                            type="button"
+                            className="text-xs t-secondary transition-colors hover:text-theme"
+                            onClick={() => setLocation('/forgot-password')}
+                        >
+                            {t('login.forgot_password')}
+                        </button>
                     </>
                 )}
 

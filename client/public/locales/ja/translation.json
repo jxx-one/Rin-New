@@ -246,7 +246,50 @@
   },
   "listed": "記事にリスト",
   "load_more": "もっと読み込む",
+  "forgot": {
+    "title": "パスワード再設定",
+    "subtitle": "メール認証コードでログインパスワードを再設定します",
+    "email": "メールアドレス",
+    "email_placeholder": "you@example.com",
+    "code": "認証コード",
+    "code_placeholder": "6桁の認証コード",
+    "password": "新しいパスワード",
+    "password_placeholder": "8文字以上",
+    "confirm_password": "新しいパスワード（確認）",
+    "confirm_password_placeholder": "もう一度入力してください",
+    "send_code": "コードを送信",
+    "sending_code": "送信中...",
+    "resend_code$seconds": "{{seconds}}秒後に再送信",
+    "code_sent": "このメールアドレスが登録済みの場合、認証コードを送信しました。メールをご確認ください。",
+    "submit": "パスワードを再設定",
+    "loading": "送信中...",
+    "success": "パスワードを再設定しました。ログイン画面に戻ります...",
+    "back_to_login": "ログインに戻る",
+    "error": {
+      "empty": "メールアドレス、認証コード、新しいパスワードを入力してください",
+      "empty_email": "メールアドレスを入力してください",
+      "code_invalid": "認証コードが無効か期限切れです",
+      "password_too_short": "パスワードは8文字以上必要です",
+      "password_mismatch": "パスワードが一致しません",
+      "captcha": "先に人間確認を完了してください",
+      "captcha_failed": "人間確認に失敗しました。もう一度お試しください。",
+      "send_code_failed": "認証コードの送信に失敗しました。後でもう一度お試しください。",
+      "rate_limited": "リクエストが多すぎます。後でもう一度お試しください。",
+      "too_many_attempts": "認証コードの入力ミスが多すぎます。新しいコードを取得してください。",
+      "mail_unavailable": "メールサービスが未設定か利用できません",
+      "failed": "パスワードの再設定に失敗しました。もう一度お試しください。",
+      "network": "ネットワークエラーです。もう一度お試しください。"
+    }
+  },
   "login": {
+    "error": {
+      "captcha": "先に人間確認を完了してください",
+      "captcha_failed": "人間確認に失敗しました。もう一度お試しください。",
+      "empty": "ユーザー名とパスワードを入力してください",
+      "failed": "ログインに失敗しました",
+      "invalid": "ユーザー名またはパスワードが正しくありません",
+      "network": "ネットワークエラーです。もう一度お試しください。"
+    },
     "oauth_only": "続行するにはログインしてください",
     "password": {
       "placeholder": "パスワードを入力してください"
@@ -257,7 +300,8 @@
       "placeholder": "ユーザー名を入力してください"
     },
     "register_hint": "アカウントをお持ちでない方",
-    "register": "アカウント作成"
+    "register": "アカウント作成",
+    "forgot_password": "パスワードをお忘れですか？"
   },
   "logout": "ログアウト",
   "main_content": "本文",
@@ -359,6 +403,28 @@
     "footer_copyright": {
       "desc": "フッター最下部の著作権表記をカスタマイズする（HTML・リンク対応）。空欄の場合は既定の「© 年 Powered by」を表示する",
       "title": "フッターバッジ"
+    },
+    "turnstile": {
+      "title": "人間確認",
+      "enable": {
+        "title": "Cloudflare Turnstile を有効にする",
+        "desc": "有効にすると、ログイン・登録・パスワード再設定画面に人間確認が表示されます。サイトキーとシークレットキーの両方が設定されている場合のみ有効になります。"
+      },
+      "keys": {
+        "title": "Turnstile キー",
+        "desc": "Cloudflare ダッシュボードの Turnstile ページでウィジェットを作成し、サイトキーとシークレットキーをここに貼り付けてください。"
+      },
+      "site_key": {
+        "title": "サイトキー（Site Key）",
+        "desc": "ブラウザに配信される公開キーで、ウィジェットの描画に使います。"
+      },
+      "secret_key": {
+        "title": "シークレットキー（Secret Key）",
+        "set": "設定済み",
+        "placeholder": "Secret Key を貼り付け",
+        "placeholder_set": "空欄のまま保存すると現在のキーを維持します",
+        "desc": "サーバー側にのみ保存され、API はマスクされた値だけを返します。空欄保存で既存のキーが上書きされることはありません。"
+      }
     },
     "webhook": {
       "title": "Webhook",
@@ -958,6 +1024,8 @@
     "disabled_hint": "メール登録が有効化されていないか、メールサービスが未設定です。",
     "error": {
       "empty": "メールアドレス、認証コード、ユーザー名、パスワードを入力してください",
+      "captcha": "先に人間確認を完了してください",
+      "captcha_failed": "人間確認に失敗しました。もう一度お試しください。",
       "empty_email": "メールアドレスを入力してください",
       "password_too_short": "パスワードは8文字以上必要です",
       "password_mismatch": "パスワードが一致しません",

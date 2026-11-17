@@ -228,11 +228,17 @@ export interface AuthStatus {
   password: boolean;
   /** 管理员已开启注册且邮件服务可用。 */
   register: boolean;
+  /** 管理员已开启 Turnstile，并且前台密钥与服务端密钥都已配置。 */
+  turnstile: boolean;
+  /** Turnstile 站点密钥；未启用时为空字符串。 */
+  turnstileSiteKey: string;
 }
 
 export interface LoginRequest {
   username: string;
   password: string;
+  /** Turnstile 客户端 token；未启用时省略。 */
+  turnstileToken?: string;
 }
 
 export interface LoginResponse {
@@ -243,6 +249,7 @@ export interface LoginResponse {
 
 export interface RegisterCodeRequest {
   email: string;
+  turnstileToken?: string;
 }
 
 export interface RegisterCodeResponse {
@@ -257,6 +264,29 @@ export interface RegisterRequest {
   username: string;
   password: string;
   code: string;
+  turnstileToken?: string;
+}
+
+export interface PasswordResetCodeRequest {
+  email: string;
+  turnstileToken?: string;
+}
+
+export interface PasswordResetCodeResponse {
+  success: boolean;
+  expiresIn: number;
+  resendAfter: number;
+}
+
+export interface PasswordResetRequest {
+  email: string;
+  code: string;
+  password: string;
+  turnstileToken?: string;
+}
+
+export interface PasswordResetResponse {
+  success: boolean;
 }
 
 // ============================================================================
@@ -478,6 +508,8 @@ export const API_PATHS = {
   AUTH_LOGIN: '/api/auth/login',
   AUTH_REGISTER_CODE: '/api/auth/register/code',
   AUTH_REGISTER: '/api/auth/register',
+  AUTH_PASSWORD_CODE: '/api/auth/password/code',
+  AUTH_PASSWORD_RESET: '/api/auth/password/reset',
 
   // User
   USER_PROFILE: '/api/user/profile',

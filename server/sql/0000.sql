@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `feeds` (
 	`listed` integer DEFAULT 1 NOT NULL,
 	`draft` integer DEFAULT 1 NOT NULL,
 	`top` integer DEFAULT 0 NOT NULL,
+	`sort_order` integer DEFAULT 0 NOT NULL,
 	`password_hash` text,
 	`uid` integer NOT NULL,
 	`created_at` integer DEFAULT (unixepoch()) NOT NULL,

@@ -9,7 +9,42 @@ permissions:
   contents: write
 
 jobs:
+  # 只允许与 main 分支 package.json 版本一致的 tag 构建，
+  # 历史版本 tag 仍然保留在仓库里，但推送时不会触发构建。
+  check-latest:
+    runs-on: ubuntu-latest
+    outputs:
+      is_latest: ${{ steps.check.outputs.is_latest }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compare tag with main package version
+        id: check
+        run: |
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+            echo "is_latest=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git fetch --no-tags origin main
+          MAIN_VERSION=$(git show origin/main:package.json | grep '"version"' | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+
+          echo "Tag: ${GITHUB_REF_NAME}"
+          echo "main package version: v${MAIN_VERSION}"
+
+          if [ "v${MAIN_VERSION}" = "${GITHUB_REF_NAME}" ]; then
+            echo "is_latest=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_latest=false" >> "$GITHUB_OUTPUT"
+            echo "This tag is not the latest version on main; skipping build."
+          fi
+
   validate:
+    needs: check-latest
+    if: needs.check-latest.outputs.is_latest == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

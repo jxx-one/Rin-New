@@ -472,6 +472,142 @@ describe("PasswordAuthService", () => {
       expect(result.data?.password).toBe(false);
     });
   });
+
+  describe("Turnstile protection", () => {
+    it("reports readiness in auth status", async () => {
+      await clientConfig.set("turnstile.enabled", true);
+      await clientConfig.set("turnstile.site_key", "site-key");
+      await serverConfig.set("turnstile.secret_key", "secret-key");
+
+      const result = await api.auth.status();
+
+      expect((result.data as any)?.turnstile).toBe(true);
+      expect((result.data as any)?.turnstileSiteKey).toBe("site-key");
+    });
+
+    it("rejects a login without a token when enabled", async () => {
+      await clientConfig.set("turnstile.enabled", true);
+      await clientConfig.set("turnstile.site_key", "site-key");
+      await serverConfig.set("turnstile.secret_key", "secret-key");
+
+      const result = await api.auth.login({ username: "admin", password: "admin123" } as any);
+
+      expect(result.error?.status).toBe(400);
+      expect((result.error?.value as any).error.message).toBe("Human verification is required");
+    });
+
+    it("does not block login when the secret key is missing", async () => {
+      await clientConfig.set("turnstile.enabled", true);
+      await clientConfig.set("turnstile.site_key", "site-key");
+
+      const result = await api.auth.login({ username: "admin", password: "admin123" });
+
+      expect(result.error).toBeUndefined();
+      expect(result.data?.success).toBe(true);
+    });
+  });
+
+  describe("POST /auth/password/* - Password reset", () => {
+    async function call(path: string, body: unknown) {
+      const response = await app.fetch(new Request(`http://localhost/auth${path}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      }), env);
+      const data = await response.json().catch(() => null) as any;
+      return { status: response.status, data };
+    }
+
+    async function configureMail() {
+      await serverConfig.set("mail.enabled", "true");
+      await serverConfig.set("mail.email", "sender@example.com");
+      await serverConfig.set("mail.password", "secret");
+      await serverConfig.set("mail.account_id", "1");
+      await serverConfig.set("mail.from_name", "Rin");
+    }
+
+    it("sends a reset code and updates the password", async () => {
+      sqlite.exec(`
+        INSERT INTO users (id, username, avatar, openid, password, permission, email)
+        VALUES (7, 'resetuser', '', 'email:reset', '${await hashPassword('oldpassword')}', 0, 'reset@example.com')
+      `);
+      await configureMail();
+
+      const requests: Array<{ url: string; body: any }> = [];
+      const originalFetch = globalThis.fetch;
+      globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+        const url = typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
+        const body = typeof init?.body === "string" ? JSON.parse(init.body) : null;
+        requests.push({ url, body });
+        const payload = url.includes("/api/login")
+          ? { code: 200, data: { token: "mail-token" } }
+          : { code: 200, data: {} };
+        return new Response(JSON.stringify(payload), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        });
+      }) as typeof fetch;
+
+      try {
+        const codeResult = await call("/password/code", { email: "RESET@example.com" });
+        expect(codeResult.status).toBe(200);
+        expect(codeResult.data?.success).toBe(true);
+
+        const sendRequest = requests.find((request) => request.url.includes("/api/email/send"));
+        expect(sendRequest?.body.receiveEmail).toEqual(["reset@example.com"]);
+        const code = /验证码：(\d{6})/.exec(String(sendRequest?.body.text || ""))?.[1];
+        expect(code).toHaveLength(6);
+
+        const resetResult = await call("/password/reset", {
+          email: "reset@example.com",
+          code,
+          password: "newpassword",
+        });
+        expect(resetResult.status).toBe(200);
+        expect(resetResult.data?.success).toBe(true);
+
+        const login = await api.auth.login({ username: "resetuser", password: "newpassword" });
+        expect(login.error).toBeUndefined();
+        expect(login.data?.success).toBe(true);
+
+        const reused = await call("/password/reset", {
+          email: "reset@example.com",
+          code,
+          password: "anotherpass",
+        });
+        expect(reused.status).toBe(400);
+      } finally {
+        globalThis.fetch = originalFetch;
+      }
+    });
+
+    it("returns success without sending mail for an unknown email", async () => {
+      await configureMail();
+
+      const requests: Array<{ url: string }> = [];
+      const originalFetch = globalThis.fetch;
+      globalThis.fetch = (async (input: RequestInfo | URL) => {
+        const url = typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
+        requests.push({ url });
+        const payload = url.includes("/api/login")
+          ? { code: 200, data: { token: "mail-token" } }
+          : { code: 200, data: {} };
+        return new Response(JSON.stringify(payload), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        });
+      }) as typeof fetch;
+
+      try {
+        const result = await call("/password/code", { email: "nobody@example.com" });
+        expect(result.status).toBe(200);
+        expect(result.data?.success).toBe(true);
+        expect(requests.some((request) => request.url.includes("/api/email/send"))).toBe(false);
+      } finally {
+        globalThis.fetch = originalFetch;
+      }
+    });
+  });
 });
 
 // Hash password using SHA-256

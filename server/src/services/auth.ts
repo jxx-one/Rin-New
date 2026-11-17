@@ -21,12 +21,18 @@ import {
     consumeEmailVerification,
     createEmailVerification,
     EMAIL_CODE_MAX_ATTEMPTS,
+    EMAIL_CODE_TTL_SECONDS,
     isMailReady,
     isValidEmail,
     normalizeEmail,
     sendVerificationEmail,
     type EmailVerificationPurpose,
 } from "../utils/email-verification";
+import {
+    assertTurnstileToken,
+    isTurnstileActive,
+    resolveTurnstileConfig,
+} from "../utils/turnstile";
 
 /** 管理端保存的注册开关可能是 boolean，也可能是旧配置里的字符串。 */
 function normalizeConfigBoolean(value: unknown): boolean {
@@ -111,13 +117,23 @@ export function PasswordAuthService(): Hono<{
         const db = c.get('db');
         const env = c.env;
 
-        const body = await profileAsync(c, 'auth_login_parse', () => c.req.json()) as { username?: string; password?: string };
+        const body = await profileAsync(c, 'auth_login_parse', () => c.req.json()) as { username?: string; password?: string; turnstileToken?: string };
         const username = typeof body.username === "string" ? body.username.trim() : "";
         const password = typeof body.password === "string" ? body.password : "";
 
         if (!username || !password) {
             throw new BadRequestError('Username and password are required');
         }
+
+        const turnstile = await profileAsync(c, 'auth_login_turnstile_config', () => resolveTurnstileConfig(
+            c.get('clientConfig'),
+            c.get('serverConfig'),
+        ));
+        await profileAsync(c, 'auth_login_turnstile_verify', () => assertTurnstileToken(
+            turnstile,
+            body.turnstileToken,
+            c.req.header('cf-connecting-ip'),
+        ));
 
         // 先按用户名查库；管理员和普通用户共用同一条密码校验路径。
         let user = await profileAsync(c, 'auth_user_lookup', () => db.query.users.findFirst({
@@ -201,11 +217,21 @@ export function PasswordAuthService(): Hono<{
             throw new ForbiddenError('Registration is disabled');
         }
 
-        const body = await profileAsync(c, 'auth_register_code_parse', () => c.req.json()) as { email?: string };
+        const body = await profileAsync(c, 'auth_register_code_parse', () => c.req.json()) as { email?: string; turnstileToken?: string };
         const email = normalizeEmail(body.email);
         if (!isValidEmail(email)) {
             throw new BadRequestError('A valid email address is required');
         }
+
+        const turnstile = await profileAsync(c, 'auth_register_code_turnstile_config', () => resolveTurnstileConfig(
+            c.get('clientConfig'),
+            c.get('serverConfig'),
+        ));
+        await profileAsync(c, 'auth_register_code_turnstile_verify', () => assertTurnstileToken(
+            turnstile,
+            body.turnstileToken,
+            c.req.header('cf-connecting-ip'),
+        ));
 
         if (!(await getMailReadiness(c))) {
             throw new ServiceUnavailableError('Email service is not configured');
@@ -271,12 +297,23 @@ export function PasswordAuthService(): Hono<{
             username?: unknown;
             password?: unknown;
             code?: unknown;
+            turnstileToken?: unknown;
         };
         const { email, username, password } = assertRegistrationInput(body);
         const code = typeof body.code === "string" ? body.code.trim() : "";
         if (!/^\d{6}$/.test(code)) {
             throw new BadRequestError('A 6-digit verification code is required');
         }
+
+        const turnstile = await profileAsync(c, 'auth_register_turnstile_config', () => resolveTurnstileConfig(
+            c.get('clientConfig'),
+            c.get('serverConfig'),
+        ));
+        await profileAsync(c, 'auth_register_turnstile_verify', () => assertTurnstileToken(
+            turnstile,
+            body.turnstileToken,
+            c.req.header('cf-connecting-ip'),
+        ));
 
         const db = c.get('db');
         const existingEmail = await profileAsync(c, 'auth_register_email_lookup', () => db.query.users.findFirst({
@@ -357,16 +394,166 @@ export function PasswordAuthService(): Hono<{
         return c.json(sessionResponse(user, token), 201);
     });
 
+    // POST /auth/password/code - 发送忘记密码验证码
+    app.post("/password/code", async (c: AppContext) => {
+        const body = await profileAsync(c, 'auth_password_code_parse', () => c.req.json()) as {
+            email?: unknown;
+            turnstileToken?: unknown;
+        };
+        const email = normalizeEmail(body.email);
+        if (!isValidEmail(email)) {
+            throw new BadRequestError('A valid email address is required');
+        }
+
+        const turnstile = await profileAsync(c, 'auth_password_code_turnstile_config', () => resolveTurnstileConfig(
+            c.get('clientConfig'),
+            c.get('serverConfig'),
+        ));
+        await profileAsync(c, 'auth_password_code_turnstile_verify', () => assertTurnstileToken(
+            turnstile,
+            body.turnstileToken,
+            c.req.header('cf-connecting-ip'),
+        ));
+
+        if (!(await getMailReadiness(c))) {
+            throw new ServiceUnavailableError('Email service is not configured');
+        }
+
+        const env = c.env;
+        if (!env.JWT_SECRET) {
+            throw new InternalServerError('JWT secret is not configured');
+        }
+
+        const db = c.get('db');
+        const user = await profileAsync(c, 'auth_password_code_user_lookup', () => db.query.users.findFirst({
+            where: eq(users.email, email),
+        }));
+
+        // 邮箱未注册时仍返回成功，避免把接口变成账号探测工具。
+        if (!user) {
+            return c.json({
+                success: true,
+                expiresIn: EMAIL_CODE_TTL_SECONDS,
+                resendAfter: 60,
+            });
+        }
+
+        const verification = await profileAsync(c, 'auth_password_code_create', () => createEmailVerification(
+            db,
+            email,
+            "password_reset",
+            env.JWT_SECRET,
+        ));
+
+        const clientConfig = c.get('clientConfig');
+        const siteName = String((await clientConfig?.get("site.name")) || "Rin");
+        const serverConfig = c.get('serverConfig');
+        if (!serverConfig) {
+            throw new ServiceUnavailableError('Email service is not configured');
+        }
+
+        const sendResult = await profileAsync(c, 'auth_password_code_send', () => sendVerificationEmail(
+            serverConfig,
+            email,
+            verification.code,
+            "password_reset",
+            siteName,
+        ));
+
+        if (!sendResult.success) {
+            await db.delete(emailVerifications).where(eq(emailVerifications.id, verification.id));
+            throw new ServiceUnavailableError(sendResult.error || 'Failed to send verification email');
+        }
+
+        return c.json({
+            success: true,
+            expiresIn: verification.expiresIn,
+            resendAfter: 60,
+        });
+    });
+
+    // POST /auth/password/reset - 使用邮箱验证码重置密码
+    app.post("/password/reset", async (c: AppContext) => {
+        const body = await profileAsync(c, 'auth_password_reset_parse', () => c.req.json()) as {
+            email?: unknown;
+            code?: unknown;
+            password?: unknown;
+            turnstileToken?: unknown;
+        };
+        const email = normalizeEmail(body.email);
+        const code = typeof body.code === "string" ? body.code.trim() : "";
+        const password = typeof body.password === "string" ? body.password : "";
+
+        if (!isValidEmail(email)) {
+            throw new BadRequestError('A valid email address is required');
+        }
+        if (!/^\d{6}$/.test(code)) {
+            throw new BadRequestError('A 6-digit verification code is required');
+        }
+        if (password.length < 8 || password.length > 128) {
+            throw new BadRequestError('Password must be between 8 and 128 characters');
+        }
+
+        const turnstile = await profileAsync(c, 'auth_password_reset_turnstile_config', () => resolveTurnstileConfig(
+            c.get('clientConfig'),
+            c.get('serverConfig'),
+        ));
+        await profileAsync(c, 'auth_password_reset_turnstile_verify', () => assertTurnstileToken(
+            turnstile,
+            body.turnstileToken,
+            c.req.header('cf-connecting-ip'),
+        ));
+
+        const env = c.env;
+        if (!env.JWT_SECRET) {
+            throw new InternalServerError('JWT secret is not configured');
+        }
+
+        const db = c.get('db');
+        const user = await profileAsync(c, 'auth_password_reset_user_lookup', () => db.query.users.findFirst({
+            where: eq(users.email, email),
+        }));
+        if (!user) {
+            throw new BadRequestError('Verification code is invalid or expired');
+        }
+
+        const verification = await profileAsync(c, 'auth_password_reset_code_consume', () => consumeEmailVerification(
+            db,
+            email,
+            "password_reset",
+            code,
+            env.JWT_SECRET,
+        ));
+
+        if (!verification.ok) {
+            if (verification.reason === "attempts") {
+                throw new ConflictError('Too many verification attempts; request a new code');
+            }
+            throw new BadRequestError('Verification code is invalid or expired');
+        }
+
+        const passwordHash = await profileAsync(c, 'auth_password_reset_hash', () => hashPassword(password));
+        await profileAsync(c, 'auth_password_reset_save', () => db.update(users)
+            .set({ password: passwordHash })
+            .where(eq(users.id, user.id)));
+
+        return c.json({ success: true });
+    });
+
     // Check whether login methods and email registration are available
     app.get("/status", async (c: AppContext) => {
         const env = c.env;
         const registerEnabled = await isRegistrationEnabled(c);
         const mailReady = await getMailReadiness(c);
+        const turnstile = await resolveTurnstileConfig(c.get('clientConfig'), c.get('serverConfig'));
+        const turnstileActive = isTurnstileActive(turnstile);
 
         return c.json({
             github: !!(env.RIN_GITHUB_CLIENT_ID && env.RIN_GITHUB_CLIENT_SECRET),
             password: !!(env.ADMIN_USERNAME && env.ADMIN_PASSWORD),
             register: registerEnabled && mailReady,
+            turnstile: turnstileActive,
+            turnstileSiteKey: turnstileActive ? turnstile.siteKey : "",
         });
     });
 

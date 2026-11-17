@@ -20,11 +20,13 @@ import { useSiteConfig } from "../hooks/useSiteConfig";
 import { applyThemeColor, normalizeThemeColor } from "../utils/theme-color";
 import { AISummarySettings } from "./settings-ai";
 import { MailSettings } from "./settings-mail";
+import { TurnstileSettings } from "./settings-turnstile";
 import { ItemButton, ItemImageInput, ItemInput, ItemSwitch, ItemTitle, ItemWithUpload } from "./settings-items";
 import {
   areSettingsDraftsEqual,
   buildAIConfigDraftValue,
   buildMailSettingsValue,
+  buildTurnstileSettingsValue,
   createSettingsConfigWrappers,
   importFeedBackupFile,
   importWordPressFile,
@@ -65,6 +67,7 @@ export function Settings() {
   const [initialDraft, setInitialDraft] = useState<SettingsDraft>({ clientConfig: {}, serverConfig: {} });
   const [hasStoredAiApiKey, setHasStoredAiApiKey] = useState(false);
   const [hasStoredMailPassword, setHasStoredMailPassword] = useState(false);
+  const [hasStoredTurnstileSecret, setHasStoredTurnstileSecret] = useState(false);
   const ref = useRef(false);
   const initialDraftRef = useRef<SettingsDraft>({ clientConfig: {}, serverConfig: {} });
   const { showAlert, alertUI } = useAlert();
@@ -82,6 +85,7 @@ export function Settings() {
         initialDraftRef.current = state.draft;
         setHasStoredAiApiKey(state.hasStoredAiApiKey);
         setHasStoredMailPassword(state.hasStoredMailPassword);
+        setHasStoredTurnstileSecret(state.hasStoredTurnstileSecret);
         mergeSessionConfig(state.draft.clientConfig);
         applyThemeColor(getDraftThemeColor(state.draft));
       })
@@ -101,6 +105,10 @@ export function Settings() {
   const { clientConfig, serverConfig } = useMemo(() => createSettingsConfigWrappers(draft), [draft]);
   const aiValue = useMemo(() => buildAIConfigDraftValue(draft, hasStoredAiApiKey), [draft, hasStoredAiApiKey]);
   const mailValue = useMemo(() => buildMailSettingsValue(draft, hasStoredMailPassword), [draft, hasStoredMailPassword]);
+  const turnstileValue = useMemo(
+    () => buildTurnstileSettingsValue(draft, hasStoredTurnstileSecret),
+    [draft, hasStoredTurnstileSecret],
+  );
   const hasUnsavedChanges = !areSettingsDraftsEqual(draft, initialDraft);
   const themeColorValue = normalizeThemeColor(String(clientConfig.get("theme.color") ?? "#fc466b"));
   const feedLayoutValue = normalizeFeedLayout(String(clientConfig.get("feed.layout") ?? "list"));
@@ -126,6 +134,7 @@ export function Settings() {
       initialDraftRef.current = state.draft;
       setHasStoredAiApiKey(state.hasStoredAiApiKey || aiValue.apiKey.trim().length > 0);
       setHasStoredMailPassword(state.hasStoredMailPassword || mailValue.password.trim().length > 0);
+      setHasStoredTurnstileSecret(state.hasStoredTurnstileSecret || turnstileValue.secretKey.trim().length > 0);
       mergeSessionConfig(state.draft.clientConfig);
       window.dispatchEvent(new Event("storage"));
       showAlert(t("settings.ai_summary.save_success"));
@@ -586,6 +595,21 @@ export function Settings() {
               }
               if (updates.notifyFeed !== undefined) {
                 setConfigValue("server", "mail.notify_feed", updates.notifyFeed);
+              }
+            }}
+          />
+
+          <TurnstileSettings
+            value={turnstileValue}
+            onChange={(updates) => {
+              if (updates.enabled !== undefined) {
+                setConfigValue("client", "turnstile.enabled", updates.enabled);
+              }
+              if (updates.siteKey !== undefined) {
+                setConfigValue("client", "turnstile.site_key", updates.siteKey);
+              }
+              if (updates.secretKey !== undefined) {
+                setConfigValue("server", "turnstile.secret_key", updates.secretKey);
               }
             }}
           />

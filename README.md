@@ -168,14 +168,6 @@ Rin-New 继续使用原版的 Cloudflare 部署结构：
 
 这些名称都可以通过 `.env.local` 中的 `WORKER_NAME`、`DB_NAME`、`TASK_QUEUE_NAME`、`PAGES_PROJECT_NAME` 覆盖。
 
-本地开发需要安装 Bun，复制 `.env.example` 为 `.env.local`，填写自己的 D1、对象存储、邮件等配置，然后执行数据库迁移并启动开发环境。🛠️
-
-```bash
-bun install
-bun run db:migrate
-bun dev
-```
-
 正式部署前需要配置好 Cloudflare API Token、账号 ID，以及 D1、对象存储等真实配置。`bun run deploy` 会创建或复用 D1 数据库、执行迁移并部署 Worker；如果还需要单独的 Pages 项目，再执行客户端部署命令。🚀
 
 ```bash
@@ -184,6 +176,62 @@ bun cli/bin/rin.ts deploy --client
 ```
 
 已有站点升级时，建议先备份 D1 数据，再执行迁移。
+
+## 🛠️ 本地开发
+
+完整步骤、配置项与常见问题见 [本地开发.md](本地开发.md)，下面是快速开始。本地开发只用 Bun + Wrangler 的本地模拟（D1 / R2），不需要 Cloudflare 账号。
+
+**环境要求**：Bun 1.3.x（仓库锁定 `bun@1.3.13`）。
+
+1. 安装依赖
+
+```bash
+bun install
+```
+
+2. 创建并填写本地配置
+
+```bash
+cp .env.example .env.local
+```
+
+必填项：`NAME`、`AVATAR`、`RIN_GITHUB_CLIENT_ID`、`RIN_GITHUB_CLIENT_SECRET`、`JWT_SECRET`。使用本地 R2 模拟时加 `R2_BUCKET_NAME=rin-local`，不填则需提供 `S3_ENDPOINT`、`S3_BUCKET`、`S3_ACCESS_KEY_ID`、`S3_SECRET_ACCESS_KEY`。
+
+3. 启动开发环境
+
+```bash
+bun dev
+```
+
+打开 http://localhost:11498 ，默认管理员 `admin` / `admin123`。首次启动会自动生成 `wrangler.toml`、`.dev.vars`、`client/.env`，创建 `dist/client`，并完成本地 D1 迁移。
+
+常用命令：
+
+| 命令 | 说明 |
+| :-- | :-- |
+| `bun dev` | 前端 + Worker 一体启动 |
+| `bun dev:client` / `bun dev:server` | 单独启动前端 / 后端 |
+| `bun check` | 全仓库 TypeScript 检查 |
+| `bun test:server` / `bun test:client` | 服务端 / 前端测试 |
+| `bun build` | 构建前端并试编译 Worker |
+
+本地验证人机验证可直接使用 Cloudflare 官方测试密钥：Site Key `3x00000000000000000000FF`、Secret Key `1x0000000000000000000000000000000AA`。使用真实密钥时，需要先在 Cloudflare 控制台的 Hostname Management 中加入 `localhost`。注册与忘记密码依赖 Cloud Mail 邮件配置，配置完成后在后台打开注册开关。
+
+## 🗓️ 更新日志
+
+### v1.2.0（2026-11-17）
+
+- 🛡️ 新增 Cloudflare Turnstile 人机验证：覆盖登录、注册和忘记密码页面；后台可开关并维护 Site Key / Secret Key，Secret Key 仅保存在服务端，接口只返回掩码。
+- 🔑 新增忘记密码与重置密码流程：通过邮箱验证码设置新密码，登录页增加入口。
+- 🌐 简体中文、繁体中文、英文、日文四套语言补齐人机验证、忘记密码与后台设置文案。
+- 🧰 修复全新源码副本本地启动时 `dist/client` 不存在导致 Wrangler 退出的问题，`bun dev` 会自动创建该目录。
+- 🗄️ 修复全新本地数据库迁移到 `0013.sql` 时缺少 `feeds.sort_order` 导致失败的问题。
+- 📘 新增本地开发文档 [本地开发.md](本地开发.md)，并在 README 增加本地开发指引。
+
+### v1.0.0（2026-11-13）
+
+- 🎉 首个正式版本，基于 Rin 二次开发。
+- 包含文章管理（状态筛选、手动排序、密码访问、附件）、用户体系（邮箱注册、个人资料与后台用户管理）、邮件通知、文章导入导出、界面与中文文案优化等能力。
 
 ## 💛 说明
 

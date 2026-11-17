@@ -23,6 +23,10 @@ import type {
   RegisterCodeRequest,
   RegisterCodeResponse,
   RegisterRequest,
+  PasswordResetCodeRequest,
+  PasswordResetCodeResponse,
+  PasswordResetRequest,
+  PasswordResetResponse,
   Tag,
   TagDetail,
   Comment,
@@ -156,6 +160,10 @@ export type {
   RegisterCodeRequest,
   RegisterCodeResponse,
   RegisterRequest,
+  PasswordResetCodeRequest,
+  PasswordResetCodeResponse,
+  PasswordResetRequest,
+  PasswordResetResponse,
   Tag,
   TagDetail,
   Comment,
@@ -762,6 +770,16 @@ class AuthAPI {
   // POST /api/auth/register
   async register(body: RegisterRequest): Promise<ApiResponse<LoginResponse>> {
     return this.http.post<LoginResponse>("/api/auth/register", body);
+  }
+
+  // POST /api/auth/password/code
+  async sendPasswordResetCode(body: PasswordResetCodeRequest): Promise<ApiResponse<PasswordResetCodeResponse>> {
+    return this.http.post<PasswordResetCodeResponse>("/api/auth/password/code", body);
+  }
+
+  // POST /api/auth/password/reset
+  async resetPassword(body: PasswordResetRequest): Promise<ApiResponse<PasswordResetResponse>> {
+    return this.http.post<PasswordResetResponse>("/api/auth/password/reset", body);
   }
 }
 

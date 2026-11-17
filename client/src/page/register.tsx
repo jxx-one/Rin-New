@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "wouter";
 import { Button, ButtonWithLoading } from "../components/button";
 import { Input } from "../components/input";
+import { TurnstileWidget } from "../components/turnstile";
 import { client } from "../app/runtime";
 import { setAuthToken } from "../utils/auth";
 
@@ -19,12 +20,28 @@ export function RegisterPage() {
     const [codeCooldown, setCodeCooldown] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [registerEnabled, setRegisterEnabled] = useState<boolean | null>(null);
+    const [turnstile, setTurnstile] = useState<{ active: boolean; siteKey: string }>({ active: false, siteKey: "" });
+    const [captchaToken, setCaptchaToken] = useState("");
+    const [captchaResetSignal, setCaptchaResetSignal] = useState(0);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+
+    const resetCaptcha = () => {
+        if (!turnstile.active) {
+            return;
+        }
+        // Turnstile token 一次性有效，请求结束后重新出题。
+        setCaptchaToken("");
+        setCaptchaResetSignal((current) => current + 1);
+    };
 
     useEffect(() => {
         client.auth.status().then(({ data }) => {
             setRegisterEnabled(Boolean(data?.register));
+            setTurnstile({
+                active: Boolean(data?.turnstile),
+                siteKey: data?.turnstileSiteKey || "",
+            });
         }).catch(() => {
             setRegisterEnabled(false);
         });
@@ -46,16 +63,28 @@ export function RegisterPage() {
             setError(t("register.error.empty_email"));
             return;
         }
+        if (turnstile.active && !captchaToken) {
+            setError(t("register.error.captcha"));
+            return;
+        }
 
         setCodeSending(true);
         setError("");
         setSuccess("");
         try {
-            const { data, error: apiError } = await client.auth.sendRegisterCode({ email: nextEmail });
+            const { data, error: apiError } = await client.auth.sendRegisterCode({
+                email: nextEmail,
+                turnstileToken: captchaToken || undefined,
+            });
             if (apiError) {
-                setError(apiError.status === 409
-                    ? t("register.error.email_exists")
-                    : t("register.error.send_code_failed"));
+                const message = String(apiError.value || "").toLowerCase();
+                if (turnstile.active && message.includes("verification")) {
+                    setError(t("register.error.captcha_failed"));
+                } else {
+                    setError(apiError.status === 409
+                        ? t("register.error.email_exists")
+                        : t("register.error.send_code_failed"));
+                }
                 return;
             }
             setCodeCooldown(Number(data?.resendAfter) || 60);
@@ -64,6 +93,7 @@ export function RegisterPage() {
             setError(t("register.error.network"));
         } finally {
             setCodeSending(false);
+            resetCaptcha();
         }
     };
 
@@ -84,6 +114,10 @@ export function RegisterPage() {
             setError(t("register.error.code_invalid"));
             return;
         }
+        if (turnstile.active && !captchaToken) {
+            setError(t("register.error.captcha"));
+            return;
+        }
 
         setIsLoading(true);
         setError("");
@@ -95,10 +129,14 @@ export function RegisterPage() {
                 username: username.trim(),
                 password: password.trim(),
                 code: code.trim(),
+                turnstileToken: captchaToken || undefined,
             });
 
             if (apiError) {
-                if (apiError.status === 409) {
+                const message = String(apiError.value || "").toLowerCase();
+                if (turnstile.active && message.includes("verification")) {
+                    setError(t("register.error.captcha_failed"));
+                } else if (apiError.status === 409) {
                     setError(t("register.error.conflict"));
                 } else if (apiError.status === 429) {
                     setError(t("register.error.rate_limited"));
@@ -123,6 +161,7 @@ export function RegisterPage() {
             setError(t("register.error.network"));
         } finally {
             setIsLoading(false);
+            resetCaptcha();
         }
     };
 
@@ -226,6 +265,13 @@ export function RegisterPage() {
                 </div>
 
                 <div className="space-y-3 pt-1">
+                    {turnstile.active && turnstile.siteKey && (
+                        <TurnstileWidget
+                            siteKey={turnstile.siteKey}
+                            resetSignal={captchaResetSignal}
+                            onToken={setCaptchaToken}
+                        />
+                    )}
                     <ButtonWithLoading
                         title={isLoading ? t("register.loading") : t("register.submit")}
                         onClick={submit}

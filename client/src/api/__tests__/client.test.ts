@@ -338,7 +338,7 @@ describe('API Client', () => {
     })
 
     it('should check auth status', async () => {
-      const mockResponse = { github: true, password: true, register: true }
+      const mockResponse = { github: true, password: true, register: true, turnstile: false, turnstileSiteKey: '' }
 
       mockFetch.mockResolvedValueOnce(createMockResponse({
         ok: true,

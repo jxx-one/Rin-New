@@ -15,6 +15,7 @@ export type SettingsLoadState = {
   draft: SettingsDraft;
   hasStoredAiApiKey: boolean;
   hasStoredMailPassword: boolean;
+  hasStoredTurnstileSecret: boolean;
 };
 
 export const AI_PROVIDER_PRESETS = [
@@ -58,6 +59,7 @@ export function normalizeSettingsState(
   const serverConfig = { ...(data?.serverConfig ?? {}) };
   const hasStoredAiApiKey = serverConfig["ai_summary.api_key"] === MASKED_SECRET;
   const hasStoredMailPassword = serverConfig["mail.password"] === MASKED_SECRET;
+  const hasStoredTurnstileSecret = serverConfig["turnstile.secret_key"] === MASKED_SECRET;
 
   if (hasStoredAiApiKey) {
     serverConfig["ai_summary.api_key"] = "";
@@ -65,6 +67,10 @@ export function normalizeSettingsState(
 
   if (hasStoredMailPassword) {
     serverConfig["mail.password"] = "";
+  }
+
+  if (hasStoredTurnstileSecret) {
+    serverConfig["turnstile.secret_key"] = "";
   }
 
   // 旧版邮件配置不再参与编辑，避免把历史密钥回写覆盖或在新表单中误显示。
@@ -79,6 +85,7 @@ export function normalizeSettingsState(
     },
     hasStoredAiApiKey,
     hasStoredMailPassword,
+    hasStoredTurnstileSecret,
   };
 }
 
@@ -294,4 +301,25 @@ export function buildMailTestRequest(value: MailSettingsValue) {
 
 export async function importFeedBackupFile(file: File) {
   return client.feed.importAll(file);
+}
+
+export type TurnstileSettingsValue = {
+  enabled: boolean;
+  siteKey: string;
+  secretKey: string;
+  secretKeySet: boolean;
+};
+
+export function buildTurnstileSettingsValue(
+  draft: SettingsDraft,
+  hasStoredTurnstileSecret: boolean,
+): TurnstileSettingsValue {
+  const { clientConfig, serverConfig } = draft;
+
+  return {
+    enabled: toConfigBoolean(clientConfig["turnstile.enabled"], false),
+    siteKey: String(clientConfig["turnstile.site_key"] ?? ""),
+    secretKey: String(serverConfig["turnstile.secret_key"] ?? ""),
+    secretKeySet: hasStoredTurnstileSecret || String(serverConfig["turnstile.secret_key"] ?? "").trim().length > 0,
+  };
 }

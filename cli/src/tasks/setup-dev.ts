@@ -112,6 +112,10 @@ S3_SECRET_ACCESS_KEY=${env.S3_SECRET_ACCESS_KEY}
   console.log("✅ 已生成 wrangler.toml");
   console.log("✅ 已生成 client/.env");
   console.log("✅ 已生成 .dev.vars");
+
+  // wrangler.dev.toml 和生成的 wrangler.toml 都把 [assets].directory 指向 dist/client。
+  // 全新克隆没有构建产物，目录不存在时 Wrangler 会直接退出，这里先建好空目录。
+  fs.mkdirSync(path.join(rootDir, "dist", "client"), { recursive: true });
   console.log("\n🎉 配置加载完成！");
   console.log("   现在可以运行：bun run dev\n");
 }

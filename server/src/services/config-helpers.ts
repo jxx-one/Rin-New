@@ -157,9 +157,9 @@ export function splitConfigPayload(body: Record<string, unknown>) {
       continue;
     }
 
-    // 邮件登录密码留空表示沿用已保存的密码，避免掩码值回写把密码清空。
+    // 邮件登录密码 / Turnstile 密钥留空表示沿用已保存的值，避免掩码值回写把密钥清空。
     if (
-      key === `${MAIL_CONFIG_PREFIX}password` &&
+      (key === `${MAIL_CONFIG_PREFIX}password` || key === "turnstile.secret_key") &&
       typeof body[key] === "string" &&
       (body[key] as string).trim() === ""
     ) {

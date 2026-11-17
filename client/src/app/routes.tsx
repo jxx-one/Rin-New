@@ -16,6 +16,7 @@ import { ErrorPage } from "../page/error";
 import { FeedPage, TOCHeader } from "../page/feed";
 import { FeedsPage } from "../page/feeds";
 import { FeedsAdminPage } from "../page/feeds-admin";
+import { ForgotPasswordPage } from "../page/forgot";
 import { FriendsPage } from "../page/friends";
 import { HealthPage } from "../page/health";
 import { HashtagPage } from "../page/hashtag";
@@ -109,6 +110,10 @@ export function AppRoutes() {
 
       <AppRoute path="/register">
         <RegisterPage />
+      </AppRoute>
+
+      <AppRoute path="/forgot-password">
+        <ForgotPasswordPage />
       </AppRoute>
 
       <AppRoute path="/profile">

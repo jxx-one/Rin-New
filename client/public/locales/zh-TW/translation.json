@@ -246,8 +246,45 @@
   },
   "listed": "列出在文章中",
   "load_more": "載入更多",
+  "forgot": {
+    "title": "重設密碼",
+    "subtitle": "透過電子郵件驗證碼重設登入密碼",
+    "email": "電子郵件",
+    "email_placeholder": "you@example.com",
+    "code": "驗證碼",
+    "code_placeholder": "6 位數字驗證碼",
+    "password": "新密碼",
+    "password_placeholder": "至少 8 位密碼",
+    "confirm_password": "確認新密碼",
+    "confirm_password_placeholder": "請再次輸入新密碼",
+    "send_code": "發送驗證碼",
+    "sending_code": "發送中...",
+    "resend_code$seconds": "{{seconds}} 秒後重發",
+    "code_sent": "如果此電子郵件已註冊，驗證碼已發送，請檢查信箱",
+    "submit": "重設密碼",
+    "loading": "提交中...",
+    "success": "密碼已重設，正在返回登入頁...",
+    "back_to_login": "返回登入",
+    "error": {
+      "empty": "請填寫電子郵件、驗證碼和新密碼",
+      "empty_email": "請輸入電子郵件",
+      "code_invalid": "驗證碼格式不正確或已失效",
+      "password_too_short": "密碼至少需要 8 位",
+      "password_mismatch": "兩次輸入的密碼不一致",
+      "captcha": "請先完成人機驗證",
+      "captcha_failed": "人機驗證失敗，請重試",
+      "send_code_failed": "驗證碼發送失敗，請稍後重試",
+      "rate_limited": "操作過於頻繁，請稍後再試",
+      "too_many_attempts": "驗證碼錯誤次數過多，請重新取得",
+      "mail_unavailable": "郵件服務未設定或暫不可用",
+      "failed": "密碼重設失敗，請重試",
+      "network": "網路錯誤，請重試"
+    }
+  },
   "login": {
     "error": {
+      "captcha": "請先完成人機驗證",
+      "captcha_failed": "人機驗證失敗，請重試",
       "empty": "請輸入用戶名和密碼",
       "failed": "登入失敗",
       "invalid": "用戶名或密碼錯誤",
@@ -266,7 +303,8 @@
       "placeholder": "請輸入用戶名"
     },
     "register_hint": "還沒有帳號？",
-    "register": "註冊帳號"
+    "register": "註冊帳號",
+    "forgot_password": "忘記密碼？"
   },
   "logout": "登出",
   "main_content": "正文",
@@ -368,6 +406,28 @@
     "footer_copyright": {
       "desc": "自訂頁腳底部的版權角標（支援 HTML，可放連結）；留空則顯示預設的 © 年份 Powered by 文案",
       "title": "頁腳角標"
+    },
+    "turnstile": {
+      "title": "人機驗證",
+      "enable": {
+        "title": "啟用 Cloudflare Turnstile",
+        "desc": "開啟後，登入、註冊和忘記密碼頁面會顯示人機驗證；站點金鑰與服務端金鑰都設定齊全後才真正生效。"
+      },
+      "keys": {
+        "title": "Turnstile 金鑰",
+        "desc": "在 Cloudflare 控制台的 Turnstile 頁面建立站點後，複製站點金鑰和服務端金鑰填入此處。"
+      },
+      "site_key": {
+        "title": "站點金鑰（Site Key）",
+        "desc": "公開金鑰，會隨頁面下發到瀏覽器，用於渲染驗證元件。"
+      },
+      "secret_key": {
+        "title": "服務端金鑰（Secret Key）",
+        "set": "已設定",
+        "placeholder": "貼上 Secret Key",
+        "placeholder_set": "留空則保持現有金鑰",
+        "desc": "僅保存在服務端，儲存後介面只回傳遮罩；留空儲存不會覆蓋已有金鑰。"
+      }
     },
     "webhook": {
       "title": "Webhook",
@@ -967,6 +1027,8 @@
     "disabled_hint": "管理員尚未開啟電子郵件註冊，或郵件服務尚未設定完成。",
     "error": {
       "empty": "請填寫電子郵件、驗證碼、使用者名稱和密碼",
+      "captcha": "請先完成人機驗證",
+      "captcha_failed": "人機驗證失敗，請重試",
       "empty_email": "請輸入電子郵件",
       "password_too_short": "密碼至少需要 8 位",
       "password_mismatch": "兩次輸入的密碼不一致",
